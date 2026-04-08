@@ -1,0 +1,49 @@
+body {
+    margin: 0;
+}
+
+.main-content {
+    display: flex;
+    justify-content: center;
+}
+
+
+.banner-container h1 {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.banner-container {
+    position: relative;
+    width: 100%;
+}
+
+
+.banner-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.button-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background-color: #ef9157;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+
+    padding: 20px;
+    border-radius: 10px;
+}
+
