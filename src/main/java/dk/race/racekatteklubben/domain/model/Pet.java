@@ -4,13 +4,13 @@ public class Pet {
     int id;
     String name;
     Race race;
-    String ownerMail;
+    int ownerId;
 
-    public Pet(int id, String name, Race race, String ownerMail) {
+    public Pet(int id, String name, Race race, int ownerId) {
         this.id = id;
         this.name = name;
         this.race = race;
-        this.ownerMail = ownerMail;
+        this.ownerId = ownerId;
     }
 
     public int getId() {
@@ -32,4 +32,10 @@ public class Pet {
     public Race getRace() {
         return race;
     }
+
+    public void setRace(Race race) {this.race = race;}
+
+    public int getOwnerId() {return ownerId;}
+
+    public void setOwnerId(int ownerId) {this.ownerId = ownerId;}
 }
