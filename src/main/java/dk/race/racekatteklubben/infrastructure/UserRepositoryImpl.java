@@ -2,6 +2,7 @@ package dk.race.racekatteklubben.infrastructure;
 
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
+import dk.race.racekatteklubben.infrastructure.DatabaseConfig;
 
 import java.util.List;
 
