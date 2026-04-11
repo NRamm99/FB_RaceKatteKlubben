@@ -38,4 +38,22 @@ public class PetService {
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     }
+
+    private void validatePet(Pet pet) {
+        if (pet == null) {
+            throw new IllegalArgumentException("Oplysninger om katten mangler");
+        }
+
+        if (pet.getName() == null || pet.getName().isBlank()) {
+            throw new IllegalArgumentException("Katten skal have et navn");
+        }
+
+        if (pet.getRace() == null) {
+            throw new IllegalArgumentException("Katten skal have en race");
+        }
+
+        if (pet.getOwnerId() <= 0) {
+            throw new IllegalArgumentException("Katten skal være knyttet til en ejer");
+        }
+    }
 }

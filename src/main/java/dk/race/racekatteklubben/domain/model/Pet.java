@@ -1,10 +1,10 @@
 package dk.race.racekatteklubben.domain.model;
 
 public class Pet {
-    int id;
-    String name;
-    Race race;
-    int ownerId;
+    private int id;
+    private String name;
+    private Race race;
+    private int ownerId;
 
     public Pet(int id, String name, Race race, int ownerId) {
         this.id = id;
