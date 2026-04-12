@@ -18,7 +18,6 @@ public class User {
         this.email = email;
         this.passwordHash = passwordHash;
         this.signUpDate = signUpDate;
-        this.role = role;
         this.pets = pets;
     }
 
