@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface UserRepository {
 
-    void save(User user);
+    public void save(User user);
 
-    void update(User user);
+    public void update(User user);
 
-    void delete(User user);
+    public void delete(User user);
 
-    User findByMail(String mail);
+    public User findByMail(String mail);
 
-    List<User> findAll();
+    public List<User> findAll();
 }
