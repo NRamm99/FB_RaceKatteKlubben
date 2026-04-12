@@ -1,5 +1,6 @@
 package dk.race.racekatteklubben.application;
 
+import dk.race.racekatteklubben.application.validation.UserValidator;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

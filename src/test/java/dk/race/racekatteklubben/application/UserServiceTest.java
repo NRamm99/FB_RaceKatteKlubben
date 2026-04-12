@@ -1,5 +1,7 @@
 package dk.race.racekatteklubben.application;
 
+import dk.race.racekatteklubben.application.validation.UserValidator;
+import dk.race.racekatteklubben.domain.model.Role;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -106,6 +108,7 @@ class UserServiceTest {
                 "second@example.com",
                 "another-password",
                 LocalDate.now(),
+                Role.USER,
                 List.of()
         );
         repository.save(firstUser);
@@ -125,6 +128,7 @@ class UserServiceTest {
                 email,
                 "hashed-password",
                 LocalDate.now(),
+                Role.USER,
                 List.of()
         );
     }
