@@ -109,6 +109,6 @@ public class PetService {
 
     private void normalizePetName(Pet pet) {
         String normalizedName = pet.getName().trim().replaceAll("\\s+", " ");
-        pet.setName(normalizedName);
+        pet.changeName(normalizedName);
     }
 }

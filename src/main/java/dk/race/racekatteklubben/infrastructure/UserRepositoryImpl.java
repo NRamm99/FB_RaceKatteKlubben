@@ -116,21 +116,22 @@ public class UserRepositoryImpl implements UserRepository {
         return (rs, rowNum) -> {
             Date signUpDate = rs.getDate("sign_up_date");
 
-            User user = new User(
+            String roleValue = rs.getString("role");
+            Role role = null;
+
+            if (roleValue != null && !roleValue.isBlank()) {
+                role = Role.valueOf(roleValue);
+            }
+
+            return new User(
                     rs.getInt("id"),
                     rs.getString("username"),
                     rs.getString("email"),
                     rs.getString("password_hash"),
                     signUpDate != null ? signUpDate.toLocalDate() : null,
+                    role,
                     List.of()
             );
-
-            String roleValue = rs.getString("role");
-            if (roleValue != null && !roleValue.isBlank()) {
-                user.setRole(Role.valueOf(roleValue));
-            }
-
-            return user;
         };
     }
 }

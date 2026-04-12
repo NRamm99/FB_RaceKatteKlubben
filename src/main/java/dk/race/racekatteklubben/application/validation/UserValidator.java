@@ -1,4 +1,4 @@
-package dk.race.racekatteklubben.application;
+package dk.race.racekatteklubben.application.validation;
 
 import dk.race.racekatteklubben.domain.model.User;
 import org.springframework.stereotype.Component;
@@ -20,14 +20,14 @@ public class UserValidator {
             throw new IllegalArgumentException("Brugernavn må ikke være tomt");
         }
 
-        user.setUsername(user.getUsername().trim());
+        user.changeUsername(user.getUsername().trim());
 
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new IllegalArgumentException("E-mail må ikke være tom");
         }
 
         String normalizedEmail = user.getEmail().trim().toLowerCase();
-        user.setEmail(normalizedEmail);
+        user.changeEmail(normalizedEmail);
 
         if (!EMAIL_PATTERN.matcher(normalizedEmail).matches()) {
             throw new IllegalArgumentException("E-mailadressen er ikke gyldig");

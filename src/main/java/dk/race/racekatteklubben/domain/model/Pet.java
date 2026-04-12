@@ -25,7 +25,7 @@ public class Pet {
         return name;
     }
 
-    public void setName(String name) {
+    public void changeName(String name) {
         this.name = name;
     }
 
@@ -33,9 +33,15 @@ public class Pet {
         return race;
     }
 
-    public void setRace(Race race) {this.race = race;}
+    public void changeRace(Race race) {
+        this.race = race;
+    }
 
-    public int getOwnerId() {return ownerId;}
+    public int getOwnerId() {
+        return ownerId;
+    }
 
-    public void setOwnerId(int ownerId) {this.ownerId = ownerId;}
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
 }

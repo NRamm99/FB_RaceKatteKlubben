@@ -1,5 +1,6 @@
 package dk.race.racekatteklubben.application;
 
+import dk.race.racekatteklubben.application.validation.UserValidator;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +30,8 @@ public class AuthService {
             throw new IllegalArgumentException("Der findes allerede en bruger med den e-mail");
         }
 
-        user.setPasswordHash(passwordEncoder.encode(rawPassword));
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        user.setPasswordHash(hashedPassword);
         userRepository.save(user);
     }
 
@@ -39,8 +41,9 @@ public class AuthService {
         }
 
         userValidator.validateRawPassword(rawPassword);
+        String normalizedUsername = username.trim();
+        User user = userRepository.findByUsername(normalizedUsername);
 
-        User user = userRepository.findByUsername(username.trim());
         if (user == null) {
             throw new IllegalArgumentException("Forkert brugernavn eller adgangskode");
         }
