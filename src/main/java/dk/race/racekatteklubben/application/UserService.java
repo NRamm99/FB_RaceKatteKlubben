@@ -2,68 +2,56 @@ package dk.race.racekatteklubben.application;
 
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Service
 public class UserService {
-    private static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.(dk|com|net|org|edu|io|info|eu|app|dev|co\\.uk)$");
 
     private final UserRepository userRepository;
+    private final UserValidator userValidator;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.userValidator = userValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(User user) {
-        validateUserForWrite(user);
+    public void editUser(User user, String rawPassword) {
+        userValidator.validateUserForWrite(user);
+        userValidator.validateRawPassword(rawPassword);
 
-        if (userRepository.findByMail(user.getEmail()) != null) {
-            throw new IllegalArgumentException("En brugere med den mail eksisterer allerede");
+        if (user.getId() <= 0) {
+            throw new IllegalArgumentException("Ugyldig bruger");
         }
-
-        userRepository.save(user);
-    }
-
-    public void editUser(User user) {
-        validateUserForWrite(user);
+        user.setPasswordHash(passwordEncoder.encode(rawPassword));
         userRepository.update(user);
     }
 
     public void deleteUser(User user) {
-        if (user.getUsername() == null || user.getUsername().isBlank()) {
-            throw new IllegalArgumentException("Navn kan ikke være tomt");
+        if (user == null) {
+            throw new IllegalArgumentException("Oplysninger om brugeren mangler");
+        }
+
+        if (user.getId() <= 0) {
+            throw new IllegalArgumentException("Ugyldig bruger");
         }
 
         userRepository.delete(user);
     }
 
     public User findUserByMail(String mail) {
-        return userRepository.findByMail(mail);
+        if (mail == null || mail.isBlank()) {
+            throw new IllegalArgumentException("E-mail må ikke være tom");
+        }
+
+        return userRepository.findByMail(mail.trim().toLowerCase());
     }
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
-    }
-
-    private void validateUserForWrite(User user) {
-        if (user.getUsername() == null || user.getUsername().isBlank()) {
-            throw new IllegalArgumentException("Navn kan ikke være tomt");
-        }
-
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new IllegalArgumentException("Email kan ikke vaere tomt");
-        }
-
-        if (!EMAIL_PATTERN.matcher(user.getEmail().trim()).matches()) {
-            throw new IllegalArgumentException("Email skal vaere gyldig");
-        }
-
-        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
-            throw new IllegalArgumentException("Adgangskode kan ikke være tom");
-        }
     }
 }

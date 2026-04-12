@@ -35,7 +35,7 @@ public class PetService {
 
     public void deletePet(int id) {
         if (id <= 0) {
-            throw new IllegalArgumentException("Ugyldigt kattenummer");
+            throw new IllegalArgumentException("Ugyldig kat");
         }
 
         Pet existingPet = petRepository.findById(id);

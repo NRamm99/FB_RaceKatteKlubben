@@ -3,52 +3,63 @@ package dk.race.racekatteklubben.application;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
 
     @Test
-    void createUserRejectsInvalidEmail() {
+    void registerRejectsInvalidEmail() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        AuthService authService = new AuthService(repository, passwordEncoder, userValidator);
+
         User user = createUser("invalid-email");
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> userService.createUser(user)
+                () -> authService.register(user, "hemmeligKode123")
         );
 
-        assertEquals("Email skal vaere gyldig", exception.getMessage());
+        assertEquals("E-mailadressen er ikke gyldig", exception.getMessage());
         assertTrue(repository.savedUsers.isEmpty());
     }
 
     @Test
-    void createUserSavesValidUser() {
+    void registerSavesValidUser() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        AuthService authService = new AuthService(repository, passwordEncoder, userValidator);
+
         User user = createUser("cat.owner@example.com");
 
-        assertDoesNotThrow(() -> userService.createUser(user));
+        assertDoesNotThrow(() -> authService.register(user, "hemmeligKode123"));
 
         assertEquals(1, repository.savedUsers.size());
-        assertEquals(user, repository.savedUsers.get(0));
+
+        User savedUser = repository.savedUsers.get(0);
+        assertEquals("cat.owner@example.com", savedUser.getEmail());
+        assertNotNull(savedUser.getPasswordHash());
+        assertNotEquals("hemmeligKode123", savedUser.getPasswordHash());
     }
 
     @Test
     void editUserUpdatesRepository() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
         User user = createUser("cat.owner@example.com");
 
-        assertDoesNotThrow(() -> userService.editUser(user));
+        assertDoesNotThrow(() -> userService.editUser(user, "hemmeligKode123"));
 
         assertEquals(1, repository.updatedUsers.size());
         assertEquals(user, repository.updatedUsers.get(0));
@@ -57,7 +68,9 @@ class UserServiceTest {
     @Test
     void deleteUserDeletesRepositoryEntry() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator,  passwordEncoder);
         User user = createUser("cat.owner@example.com");
 
         assertDoesNotThrow(() -> userService.deleteUser(user));
@@ -69,7 +82,9 @@ class UserServiceTest {
     @Test
     void findUserByMailReturnsMatchingUser() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
         User user = createUser("cat.owner@example.com");
         repository.save(user);
 
@@ -81,7 +96,9 @@ class UserServiceTest {
     @Test
     void findAllUsersReturnsAllSavedUsers() {
         InMemoryUserRepository repository = new InMemoryUserRepository();
-        UserService userService = new UserService(repository);
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
         User firstUser = createUser("first@example.com");
         User secondUser = new User(
                 2,
@@ -138,6 +155,11 @@ class UserServiceTest {
                     .filter(user -> user.getEmail().equals(mail))
                     .findFirst()
                     .orElse(null);
+        }
+
+        @Override
+        public User findByUsername(String username) {
+            return null;
         }
 
         @Override

@@ -89,6 +89,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User findByUsername(String username) {
+        String sql = """
+            SELECT id, username, email, password_hash, sign_up_date, role
+            FROM users
+            WHERE username = ?
+            """;
+
+        List<User> result = jdbcTemplate.query(sql, userRowMapper(), username);
+
+        return result.isEmpty() ? null : result.get(0);
+    }
+
+    @Override
     public List<User> findAll() {
         String sql = """
                 SELECT id, username, email, password_hash, sign_up_date, role
