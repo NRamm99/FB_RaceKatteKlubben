@@ -100,3 +100,40 @@ body {
     border-radius: 10px;
 
 }
+
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.cat-card {
+    min-width: 130px;
+    text-align: left;
+}
+
+.cats-container {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    width: 100%;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.profile-info {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.profile-info .field {
+    margin: 8px 0;
+    text-align: left;
+}
