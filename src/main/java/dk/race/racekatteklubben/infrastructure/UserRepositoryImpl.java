@@ -25,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void save(User user) {
         String sql = """
-                INSERT INTO users (username, email, password_hash, sign_up_date, role)
+                INSERT INTO users (username, email, password_hash, signup_date, role)
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
@@ -55,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void update(User user) {
         String sql = """
                 UPDATE users
-                SET username = ?, email = ?, password_hash = ?, sign_up_date = ?, role = ?
+                SET username = ?, email = ?, password_hash = ?, signup_date = ?, role = ?
                 WHERE id = ?
                 """;
 
@@ -78,7 +78,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByMail(String mail) {
         String sql = """
-                SELECT id, username, email, password_hash, sign_up_date, role
+                SELECT id, username, email, password_hash, signup_date, role
                 FROM users
                 WHERE email = ?
                 """;
@@ -91,7 +91,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByUsername(String username) {
         String sql = """
-            SELECT id, username, email, password_hash, sign_up_date, role
+            SELECT id, username, email, password_hash, signup_date, role
             FROM users
             WHERE username = ?
             """;
@@ -104,7 +104,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> findAll() {
         String sql = """
-                SELECT id, username, email, password_hash, sign_up_date, role
+                SELECT id, username, email, password_hash, signup_date, role
                 FROM users
                 ORDER BY id
                 """;
@@ -114,7 +114,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private RowMapper<User> userRowMapper() {
         return (rs, rowNum) -> {
-            Date signUpDate = rs.getDate("sign_up_date");
+            Date signUpDate = rs.getDate("signup_date");
 
             String roleValue = rs.getString("role");
             Role role = null;

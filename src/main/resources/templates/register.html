@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
 
@@ -11,25 +11,26 @@
     <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
 
     <div class="login-wrapper">
-        <form th:action="@{/login}" method="post" class="login-form">
-            <h1 class="title">Login</h1>
+        <form th:action="@{/register}" method="post" class="login-form">
+            <h1 class="title">Register</h1>
 
             <!-- Username -->
             <label class="label" for="username">Username</label>
             <input class="field" id="username" type="text" name="username" required>
 
+            <!-- E-mail -->
+            <label class="label" for="email">E-mail</label>
+            <input class="field" id="email" type="email" name="email" required>
+
             <!-- Password -->
             <label class="label" for="password">Password</label>
             <input class="field" id="password" type="password" name="password" required>
 
-            <button class="loginbtn" type="submit">Login</button>
+            <button class="loginbtn" type="submit">Register</button>
 
-            <p th:if="${param.error}" style="color:red;">Invalid email or password</p>
-            <p th:if="${param.logout}" style="color:green;">You have been logged out</p>
+            <p th:if="${param.error}" style="color:red;">Could not register user</p>
 
-            <a th:href="@{/index.html}">
-                <a th:href="@{/index}" class="btn">Go back</a>
-            </a>
+            <a th:href="@{/index}" class="btn">Go back</a>
         </form>
     </div>
 
