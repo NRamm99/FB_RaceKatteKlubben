@@ -37,6 +37,7 @@
                 <div th:each="pet : ${pets}" class="upcoming-event-card">
                     <p class="cat-line" th:text="'Name: ' + ${pet.name}"></p>
                     <p class="cat-line" th:text="'Race: ' + ${pet.race}"></p>
+                    <a class="btn" th:href="@{/pets/edit-pet(id=${pet.id})}">Edit cat</a>
                 </div>
             </div>
 

@@ -56,4 +56,67 @@ public class PetController {
             return "redirect:/pets/create?error";
         }
     }
+
+    @GetMapping("/pets/edit-pet")
+    public String showEditPetPage(@RequestParam(name = "id", required = false) Integer id,
+                                  HttpSession session,
+                                  Model model) {
+
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        if (id == null) {
+            return "redirect:/profile?missingPetId";
+        }
+
+        Pet pet;
+        try {
+            pet = petService.getPetById(id);
+        } catch (IllegalArgumentException ex) {
+            return "redirect:/profile?petNotFound";
+        }
+
+        if (pet.getOwnerId() != user.getId()) {
+            return "redirect:/profile?notOwner";
+        }
+
+        model.addAttribute("pet", pet);
+        model.addAttribute("races", Race.values());
+
+        return "edit-pet"; // ✅ NOT redirect
+    }
+
+    @PostMapping("/pets/edit-pet")
+    public String updatePet(@RequestParam int id,
+                            @RequestParam String name,
+                            @RequestParam Race race,
+                            HttpSession session) {
+
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Pet pet = petService.getPetById(id);
+
+            if (pet.getOwnerId() != user.getId()) {
+                return "redirect:/profile";
+            }
+
+            pet.changeName(name);
+            pet.changeRace(race);
+
+            petService.updatePet(pet);
+
+            return "redirect:/profile";
+
+        } catch (IllegalArgumentException ex) {
+            return "redirect:/pets/edit-pet?id=" + id + "&error";
+        }
+    }
 }
