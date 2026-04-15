@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/forms.css}">
+  <meta charset="UTF-8">
+  <title>Edit user</title>
+</head>
+<body>
+
+<section class="banner-container">
+  <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+  <div class="login-wrapper">
+    <form th:action="@{/profile/edit}" method="post" class="login-form">
+      <h1 class="title">Edit user</h1>
+
+      <!-- Error message -->
+      <p th:if="${error}" style="color:red;" th:text="${error}"></p>
+
+      <!-- User info -->
+      <label class="label" for="username">Username</label>
+      <input class="field" id="username" type="text" name="username"
+             th:value="${user.username}" required>
+
+      <label class="label" for="email">E-mail</label>
+      <input class="field" id="email" type="email" name="email"
+             th:value="${user.email}" required>
+
+      <!-- Buttons -->
+      <button class="loginbtn" type="submit">Save</button>
+      <a th:href="@{/profile}" class="btn">Cancel</a>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>
