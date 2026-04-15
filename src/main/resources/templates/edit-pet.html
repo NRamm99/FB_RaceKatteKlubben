@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <meta charset="UTF-8">
+    <title>Edit Cat</title>
+</head>
+<body>
+
+<section class="banner-container">
+    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+    <div class="login-wrapper">
+        <form th:action="@{/pets/edit-pet}" method="post" class="login-form" th:object="${pet}">
+            <h1 class="title">Edit Cat</h1>
+
+            <!-- Spring Security CSRF token (required when CSRF is enabled) -->
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            <input type="hidden" th:field="*{id}">
+
+            <label class="label" for="name">Cat name</label>
+            <input class="field" id="name" type="text" th:field="*{name}" required>
+
+            <label class="label" for="race">Race</label>
+            <select class="field" id="race" th:field="*{race}" required>
+                <option th:each="race : ${races}" th:value="${race}" th:text="${race}"></option>
+            </select>
+
+            <button class="loginbtn" type="submit">Save changes</button>
+
+            <p th:if="${param.error}" style="color:red;">Could not update cat</p>
+
+            <a th:href="@{/profile}" class="btn">Back to profile</a>
+        </form>
+    </div>
+</section>
+
+</body>
+</html>
