@@ -16,13 +16,20 @@
         <div class="login-form">
             <h1 class="title">Profile</h1>
 
-            <!-- User info -->
-            <div class="profile-info">
-                <!-- Username -->
-                <p class="field" th:text="'Username: ' + ${user.username}"></p>
+            <div class="profile-header">
+                <!-- User info -->
+                <div class="profile-info">
+                    <!-- Username -->
+                    <p class="field" th:text="'Username: ' + ${user.username}"></p>
 
-                <!-- Email -->
-                <p class="field" th:text="'Email: ' + ${user.email}"></p>
+                    <!-- Email -->
+                    <p class="field" th:text="'Email: ' + ${user.email}"></p>
+                </div>
+
+                <div class="profile-account-actions">
+                    <a th:href="@{/profile/edit}" class="btn">Edit user</a>
+                    <a th:href="@{/profile/change-password}" class="btn">Change password</a>
+                </div>
             </div>
 
             <!-- Cats -->
@@ -41,6 +48,7 @@
                 </div>
             </div>
 
+            <!-- Events -->
             <h2 class="section-title">Kommende begivenheder</h2>
 
             <div th:if="${#lists.isEmpty(upcomingEvents)}" class="upcoming-events-empty">
