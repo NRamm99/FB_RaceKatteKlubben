@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <meta charset="UTF-8">
+    <title>All Cats</title>
+</head>
+<body>
+
+<section class="banner-container">
+    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+    <div class="login-wrapper">
+        <div class="login-form">
+            <h1 class="title">All Cats</h1>
+
+            <div th:if="${#lists.isEmpty(pets)}" class="upcoming-events-empty">
+                <p class="field">No cats found.</p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(pets)}" class="upcoming-events-list">
+                <div th:each="pet : ${pets}" class="upcoming-event-card">
+                    <p class="cat-line" th:text="'Name: ' + ${pet.name}"></p>
+                    <p class="cat-line" th:text="'Race: ' + ${pet.race}"></p>
+                    <p class="cat-line"
+                       th:text="${'Owner: ' + (ownerUsernames[pet.ownerId] != null ? ownerUsernames[pet.ownerId] : 'Unknown')}"></p>
+                </div>
+            </div>
+
+            <div class="profile-buttons">
+                <a th:href="@{/profile}" class="btn">Back to profile</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
