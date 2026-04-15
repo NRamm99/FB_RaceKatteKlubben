@@ -1,15 +1,42 @@
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
 .profile-buttons {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
+    gap: 12px;
     width: 100%;
     margin-top: 25px;
+}
+
+.profile-account-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+
+.profile-account-actions .btn {
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .profile-info {
     width: 100%;
     text-align: left;
-    margin-bottom: 20px;
     padding-left: 20px;
     box-sizing: border-box;
 }
@@ -54,4 +81,14 @@
     align-items: center;
     gap: 16px;
     margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+    }
+
+    .profile-account-actions {
+        width: 100%;
+    }
 }

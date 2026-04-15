@@ -32,6 +32,63 @@ public class UserService {
         userRepository.update(user);
     }
 
+    public User updateProfile(User currentUser, String username, String email) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("Brugeren er ikke logget ind");
+        }
+
+        if (currentUser.getId() <= 0) {
+            throw new IllegalArgumentException("Ugyldig bruger");
+        }
+
+        currentUser.changeUsername(username);
+        currentUser.changeEmail(email);
+
+        userValidator.validateUserForWrite(currentUser);
+
+        User existingByUsername = userRepository.findByUsername(currentUser.getUsername());
+        if (existingByUsername != null && existingByUsername.getId() != currentUser.getId()) {
+            throw new IllegalArgumentException("Brugernavnet er allerede i brug");
+        }
+
+        User existingByMail = userRepository.findByMail(currentUser.getEmail());
+        if (existingByMail != null && existingByMail.getId() != currentUser.getId()) {
+            throw new IllegalArgumentException("Der findes allerede en bruger med den e-mail");
+        }
+
+        userRepository.update(currentUser);
+        return currentUser;
+    }
+
+    public void changePassword(User currentUser, String oldPassword, String newPassword, String repeatPassword) {
+        if (currentUser == null) {
+            throw new IllegalArgumentException("Brugeren er ikke logget ind");
+        }
+
+        if (currentUser.getId() <= 0) {
+            throw new IllegalArgumentException("Ugyldig bruger");
+        }
+
+        userValidator.validateRawPassword(oldPassword);
+        userValidator.validateRawPassword(newPassword);
+        userValidator.validateRawPassword(repeatPassword);
+
+        if (!passwordEncoder.matches(oldPassword, currentUser.getPasswordHash())) {
+            throw new IllegalArgumentException("Nuværende adgangskode er forkert");
+        }
+
+        if (!newPassword.equals(repeatPassword)) {
+            throw new IllegalArgumentException("De nye adgangskoder matcher ikke");
+        }
+
+        if (oldPassword.equals(newPassword)) {
+            throw new IllegalArgumentException("Den nye adgangskode skal være forskellig fra den gamle");
+        }
+
+        currentUser.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.update(currentUser);
+    }
+
     public void deleteUser(User user) {
         if (user == null) {
             throw new IllegalArgumentException("Oplysninger om brugeren mangler");
