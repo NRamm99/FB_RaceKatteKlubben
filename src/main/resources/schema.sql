@@ -17,9 +17,11 @@ CREATE TABLE IF NOT EXISTS pets (
 
 CREATE TABLE IF NOT EXISTS events (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        owner_id INT NOT NULL,
         title VARCHAR(100) NOT NULL,
         description VARCHAR(255),
-        event_date DATETIME NOT NULL
+        event_date DATETIME NOT NULL,
+        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
     );
 
 CREATE TABLE IF NOT EXISTS pet_in_event (

@@ -6,14 +6,16 @@ import java.util.List;
 
 public class Event {
     private int id;
+    private int ownerId;
     private String title;
     private String description;
 
     private List<Pet> attendingPets;
-    LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
-    public Event(int id, String title, String description, LocalDateTime dateTime) {
+    public Event(int id, int ownerId, String title, String description, LocalDateTime dateTime) {
         this.id = id;
+        this.ownerId = ownerId;
         this.title = title;
         this.description = description;
         this.attendingPets = new ArrayList<>();
@@ -50,6 +52,14 @@ public class Event {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getTitle() {

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/events.css}">
+    <meta charset="UTF-8">
+    <title>Opret Begivenhed</title>
+</head>
+<body>
+<section class="banner-container">
+    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+    <div class="login-wrapper">
+        <form th:action="@{/events/create}" method="post" class="login-form event-create-form">
+            <h1 class="title">Opret begivenhed</h1>
+
+            <label class="label" for="title">Titel</label>
+            <input class="field event-field" id="title" type="text" name="title" required>
+
+            <label class="label" for="description">Beskrivelse</label>
+            <textarea class="field event-field event-textarea" id="description" name="description" required></textarea>
+
+            <label class="label" for="dateTime">Dato og tidspunkt</label>
+            <input class="field event-field" id="dateTime" type="datetime-local" name="dateTime" required>
+
+            <button class="btn event-submit" type="submit">Opret begivenhed</button>
+
+            <p th:if="${param.error}" class="event-message event-error">Kunne ikke oprette begivenheden.</p>
+
+            <a th:href="@{/events}" class="btn">Tilbage</a>
+        </form>
+    </div>
+</section>
+</body>
+</html>

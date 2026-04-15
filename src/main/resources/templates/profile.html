@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/forms.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
     <title>Profile</title>
 </head>
@@ -24,22 +26,40 @@
             </div>
 
             <!-- Cats -->
-            <label class="label">My cats:</label>
+            <h2 class="section-title">Mine katte</h2>
 
-            <div th:if="${#lists.isEmpty(pets)}">
+            <div th:if="${#lists.isEmpty(pets)}" class="upcoming-events-empty">
                 <p class="field">You have no cats yet.</p>
+                <a th:href="@{/pets/create}" class="btn">Add cat</a>
             </div>
 
-            <div th:if="${!#lists.isEmpty(pets)}" class="cats-container">
-                <div th:each="pet : ${pets}" class="cat-card">
+            <div th:if="${!#lists.isEmpty(pets)}" class="upcoming-events-list">
+                <div th:each="pet : ${pets}" class="upcoming-event-card">
                     <p class="cat-line" th:text="'Name: ' + ${pet.name}"></p>
                     <p class="cat-line" th:text="'Race: ' + ${pet.race}"></p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Kommende begivenheder</h2>
+
+            <div th:if="${#lists.isEmpty(upcomingEvents)}" class="upcoming-events-empty">
+                <p class="field">Du har ingen kommende begivenheder</p>
+                <a th:href="@{/events}" class="btn">Find begivenheder</a>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(upcomingEvents)}" class="upcoming-events-list">
+                <div th:each="event : ${upcomingEvents}" class="upcoming-event-card">
+                    <p class="cat-line" th:text="${event.title}"></p>
+                    <p class="cat-line"
+                       th:text="${#temporals.format(event.dateTime, 'dd MMM yyyy HH:mm')}"></p>
+                    <p class="cat-line" th:text="${event.description}"></p>
                 </div>
             </div>
 
             <!-- Buttons -->
             <div class="profile-buttons">
                 <a th:href="@{/pets/create}" class="btn">Add cat</a>
+                <a th:href="@{/events}" class="btn">Events</a>
 
                 <form th:action="@{/logout}" method="post">
                     <button class="btn" type="submit">Log out</button>

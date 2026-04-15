@@ -1,0 +1,57 @@
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.profile-info {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    box-sizing: border-box;
+}
+
+.profile-info .field {
+    margin: 8px 0;
+    text-align: left;
+}
+
+.section-title {
+    width: 100%;
+    margin: 22px 0 8px;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: left;
+    text-shadow: 0 0 14px rgba(0, 0, 0, 0.45);
+}
+
+.upcoming-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.upcoming-event-card,
+.upcoming-events-empty {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgba(167, 51, 63, 0.92);
+    color: white;
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: left;
+}
+
+.upcoming-events-empty {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}

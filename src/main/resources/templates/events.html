@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/events.css}">
+    <meta charset="UTF-8">
+    <title>Begivenheder</title>
+</head>
+<body>
+<section class="banner-container">
+    <h1>Kommende begivenheder</h1>
+    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+    <div class="events-wrapper">
+        <div class="events-header">
+            <p class="title">Vælg en begivenhed til din kat</p>
+            <div class="events-actions">
+                <a th:href="@{/events/create}" class="btn plus-btn">+</a>
+                <a th:href="@{/profile}" class="btn">Tilbage</a>
+            </div>
+        </div>
+
+        <p th:if="${param.created}" class="event-message event-success">Begivenheden blev oprettet.</p>
+        <p th:if="${param.updated}" class="event-message event-success">Begivenheden blev opdateret.</p>
+        <p th:if="${param.deleted}" class="event-message event-success">Begivenheden blev slettet.</p>
+        <p th:if="${param.joined}" class="event-message event-success">Deltagelsen blev opdateret.</p>
+        <p th:if="${param.error}" class="event-message event-error">Kunne ikke indlæse den begivenhed.</p>
+
+        <div class="events-list" th:if="${not #lists.isEmpty(events)}">
+            <article class="event-card" th:each="event : ${events}">
+                <h2 th:text="${event.title}">Event title</h2>
+                <span class="event-meta"
+                      th:text="${#temporals.format(event.dateTime, 'dd MMM yyyy HH:mm')}">01 Jan 2026 12:00</span>
+                <p th:text="${event.description}">Event description</p>
+                <div class="event-card-actions">
+                    <a th:href="@{/events/{eventId}/participate(eventId=${event.id})}" class="btn">Deltag</a>
+                    <a th:if="${event.ownerId == currentUserId}"
+                       th:href="@{/events/{eventId}/edit(eventId=${event.id})}"
+                       class="btn">Rediger</a>
+                    <form th:if="${event.ownerId == currentUserId}"
+                          th:action="@{/events/{eventId}/delete(eventId=${event.id})}"
+                          method="post"
+                          class="inline-form">
+                        <button class="btn" type="submit">Slet</button>
+                    </form>
+                </div>
+            </article>
+        </div>
+
+        <div class="event-empty" th:if="${#lists.isEmpty(events)}">
+            Der er ingen begivenheder lige nu.
+        </div>
+    </div>
+</section>
+</body>
+</html>

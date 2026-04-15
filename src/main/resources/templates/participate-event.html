@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/events.css}">
+    <meta charset="UTF-8">
+    <title>Deltag I Begivenhed</title>
+</head>
+<body>
+<section class="banner-container">
+    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+
+    <div class="events-wrapper">
+        <div class="events-header">
+            <p class="title">Vælg katte til begivenheden</p>
+            <a th:href="@{/events}" class="btn">Tilbage</a>
+        </div>
+
+        <article class="event-card">
+            <h2 th:text="${event.title}">Event title</h2>
+            <span class="event-meta"
+                  th:text="${#temporals.format(event.dateTime, 'dd MMM yyyy HH:mm')}">01 Jan 2026 12:00</span>
+            <p th:text="${event.description}">Event description</p>
+        </article>
+
+        <form th:if="${not #lists.isEmpty(pets)}"
+              th:action="@{/events/{eventId}/participate(eventId=${event.id})}"
+              method="post"
+              class="event-create-form">
+            <h2 class="title">Deltag med</h2>
+
+            <div class="pet-selection-list">
+                <label class="pet-selection-card" th:each="pet : ${pets}">
+                    <input type="checkbox"
+                           name="petIds"
+                           th:value="${pet.id}"
+                           th:checked="${#sets.contains(attendingPetIds, pet.id)}">
+                    <span class="pet-selection-name" th:text="${pet.name}">Cat name</span>
+                    <span class="pet-selection-race" th:text="${pet.race}">Race</span>
+                </label>
+            </div>
+
+            <button class="btn event-submit" type="submit">Gem deltagelse</button>
+            <p th:if="${param.error}" class="event-message event-error">Kunne ikke gemme deltagelsen.</p>
+        </form>
+
+        <div th:if="${#lists.isEmpty(pets)}" class="event-empty">
+            Du skal have mindst en kat, før du kan deltage i en begivenhed.
+            <div class="event-card-actions">
+                <a th:href="@{/pets/create}" class="btn">Tilføj kat</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

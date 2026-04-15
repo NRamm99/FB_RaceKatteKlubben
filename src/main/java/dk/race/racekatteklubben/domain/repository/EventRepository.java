@@ -9,9 +9,13 @@ public interface EventRepository {
 
     public void addEvent(Event event);
 
+    public void updateEvent(Event event);
+
     public void removeEvent(Event event);
 
     public List<Event> getEvents();
+
+    public List<Event> getUpcomingEventsByOwnerId(int ownerId);
 
     public Event getEventById(int id);
 
