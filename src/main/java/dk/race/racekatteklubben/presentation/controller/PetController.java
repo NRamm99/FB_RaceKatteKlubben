@@ -1,6 +1,7 @@
 package dk.race.racekatteklubben.presentation.controller;
 
 import dk.race.racekatteklubben.application.PetService;
+import dk.race.racekatteklubben.application.UserService;
 import dk.race.racekatteklubben.domain.model.Pet;
 import dk.race.racekatteklubben.domain.model.Race;
 import dk.race.racekatteklubben.domain.model.User;
@@ -11,13 +12,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class PetController {
 
     private final PetService petService;
+    private final UserService userService;
 
-    public PetController(PetService petService) {
+    public PetController(PetService petService, UserService userService) {
         this.petService = petService;
+        this.userService = userService;
     }
 
     @GetMapping("/pets/create")
@@ -118,5 +123,18 @@ public class PetController {
         } catch (IllegalArgumentException ex) {
             return "redirect:/pets/edit-pet?id=" + id + "&error";
         }
+    }
+
+    @GetMapping("/pets/all")
+    public String showAllCats(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("pets", petService.getAllPets());
+        model.addAttribute("ownerUsernames", petService.getOwnerIdToUsernameMap(userService.findAllUsers()));
+        return "cat-profil";
     }
 }

@@ -1,10 +1,13 @@
 package dk.race.racekatteklubben.application;
 
 import dk.race.racekatteklubben.domain.model.Pet;
+import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.PetRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PetService {
@@ -69,6 +72,23 @@ public class PetService {
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
+    }
+
+    /**
+     * Owner lookup map for views: owner_id -> username.
+     */
+    public Map<Integer, String> getOwnerIdToUsernameMap(List<User> users) {
+        if (users == null) {
+            throw new IllegalArgumentException("Users list is missing");
+        }
+
+        Map<Integer, String> ownerIdToUsername = new HashMap<>();
+        for (User u : users) {
+            if (u != null) {
+                ownerIdToUsername.put(u.getId(), u.getUsername());
+            }
+        }
+        return ownerIdToUsername;
     }
 
     private void validatePet(Pet pet) {
