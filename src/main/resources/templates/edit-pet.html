@@ -4,7 +4,7 @@
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <meta charset="UTF-8">
-    <title>Add Cat</title>
+    <title>Edit Cat</title>
 </head>
 <body>
 
@@ -12,34 +12,29 @@
     <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
 
     <div class="login-wrapper">
-        <form th:action="@{/pets/create}" method="post" class="login-form">
-            <h1 class="title">Add Cat</h1>
+        <form th:action="@{/pets/edit-pet}" method="post" class="login-form" th:object="${pet}">
+            <h1 class="title">Edit Cat</h1>
 
             <!-- Spring Security CSRF token (required when CSRF is enabled) -->
             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-            <!-- Cat Name -->
-            <label class="label" for="name">Cat name</label>
-            <input class="field" id="name" type="text" name="name" required>
+            <input type="hidden" th:field="*{id}">
 
-            <!-- Race -->
+            <label class="label" for="name">Cat name</label>
+            <input class="field" id="name" type="text" th:field="*{name}" required>
+
             <label class="label" for="race">Race</label>
-            <select class="field" id="race" name="race" required>
-                <option value="" disabled selected>Select race</option>
-                <option th:each="race : ${races}"
-                        th:value="${race}"
-                        th:text="${race}">
-                </option>
+            <select class="field" id="race" th:field="*{race}" required>
+                <option th:each="race : ${races}" th:value="${race}" th:text="${race}"></option>
             </select>
 
-            <button class="loginbtn" type="submit">Save cat</button>
+            <button class="loginbtn" type="submit">Save changes</button>
 
-            <p th:if="${param.error}" style="color:red;">Could not create cat</p>
+            <p th:if="${param.error}" style="color:red;">Could not update cat</p>
 
             <a th:href="@{/profile}" class="btn">Back to profile</a>
         </form>
     </div>
-
 </section>
 
 </body>

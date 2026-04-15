@@ -122,7 +122,7 @@ class EventServiceTest {
                 id,
                 title,
                 "A lovely cat event",
-                LocalDateTime.of(2026, 4, 20, 14, 30)
+                LocalDateTime.of(2026, 5, 20, 14, 30)
         );
         event.setAttendingPets(new ArrayList<>());
         return event;
@@ -145,6 +145,11 @@ class EventServiceTest {
         }
 
         @Override
+        public void updateEvent(Event event) {
+
+        }
+
+        @Override
         public void removeEvent(Event event) {
             deletedEvents.add(event);
         }
@@ -152,6 +157,11 @@ class EventServiceTest {
         @Override
         public List<Event> getEvents() {
             return List.copyOf(savedEvents);
+        }
+
+        @Override
+        public List<Event> getUpcomingEventsByOwnerId(int ownerId) {
+            return List.of();
         }
 
         @Override
