@@ -120,9 +120,6 @@ public class PetService {
                 .toList();
     }
 
-    /**
-     * Owner lookup map for views: owner_id -> username.
-     */
     public Map<Integer, String> getOwnerIdToUsernameMap(List<User> users) {
         if (users == null) {
             throw new IllegalArgumentException("Users list is missing");

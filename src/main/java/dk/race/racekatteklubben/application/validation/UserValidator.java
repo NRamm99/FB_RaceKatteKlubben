@@ -35,12 +35,6 @@ public class UserValidator {
         }
     }
 
-    public void validatePasswordHash(User user) {
-        if (user.getPasswordHash() == null || user.getPasswordHash().isBlank()) {
-            throw new IllegalArgumentException("Adgangskode kan ikke være tom");
-        }
-    }
-
     public void validateUserForRegister(User user, String rawPassword) {
         validateUserForWrite(user);
         validateRawPassword(rawPassword);

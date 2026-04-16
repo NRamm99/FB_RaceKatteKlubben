@@ -79,15 +79,7 @@ public class Event {
         return title;
     }
 
-    public void retitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void reviseDescription(String description) {
-        this.description = description;
     }
 }
