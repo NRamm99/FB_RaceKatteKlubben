@@ -31,7 +31,7 @@ public class AuthService {
         }
 
         String hashedPassword = passwordEncoder.encode(rawPassword);
-        user.setPasswordHash(hashedPassword);
+        user.changePasswordHash(hashedPassword);
         userRepository.save(user);
     }
 

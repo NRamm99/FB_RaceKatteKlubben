@@ -17,10 +17,6 @@ public class Pet {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -39,9 +35,5 @@ public class Pet {
 
     public int getOwnerId() {
         return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
     }
 }

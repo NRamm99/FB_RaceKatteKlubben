@@ -28,7 +28,7 @@
 .events-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .events-list {
@@ -38,7 +38,7 @@
 
 .event-card-actions {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     margin-top: 16px;
     flex-wrap: wrap;
 }
@@ -79,17 +79,16 @@
 }
 
 .event-submit {
-    border: none;
-    cursor: pointer;
     align-self: flex-start;
 }
 
 .plus-btn {
-    min-width: 48px;
+    min-width: 52px;
     padding: 12px 0;
     text-align: center;
     font-size: 1.5rem;
     line-height: 1;
+    border-radius: 14px;
 }
 
 .event-message {

@@ -26,15 +26,15 @@ public class Event {
         return attendingPets;
     }
 
-    public void setAttendingPets(List<Pet> attendingPets) {
-        this.attendingPets = attendingPets;
+    public void replaceAttendingPets(List<Pet> attendingPets) {
+        this.attendingPets = new ArrayList<>(attendingPets);
     }
 
     public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void reschedule(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -50,23 +50,15 @@ public class Event {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getOwnerId() {
         return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void retitle(String title) {
         this.title = title;
     }
 
@@ -74,7 +66,7 @@ public class Event {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void reviseDescription(String description) {
         this.description = description;
     }
 }
