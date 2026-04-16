@@ -75,7 +75,7 @@ public class EventService {
 
         if (event != null) {
             List<Pet> pets = eventRepository.findAttendingPetsByEventId(id);
-            event.setAttendingPets(pets);
+            event.replaceAttendingPets(pets);
         }
 
         return event;

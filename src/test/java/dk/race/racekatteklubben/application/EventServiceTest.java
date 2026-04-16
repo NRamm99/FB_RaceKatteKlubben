@@ -126,7 +126,7 @@ class EventServiceTest {
                 "A lovely cat event",
                 LocalDateTime.of(2026, 5, 20, 14, 30)
         );
-        event.setAttendingPets(new ArrayList<>());
+        event.replaceAttendingPets(new ArrayList<>());
         return event;
     }
 

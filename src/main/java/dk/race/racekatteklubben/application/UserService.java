@@ -29,7 +29,7 @@ public class UserService {
         if (user.getId() <= 0) {
             throw new IllegalArgumentException("Ugyldig bruger");
         }
-        user.setPasswordHash(passwordEncoder.encode(rawPassword));
+        user.changePasswordHash(passwordEncoder.encode(rawPassword));
         userRepository.update(user);
     }
 
@@ -86,7 +86,7 @@ public class UserService {
             throw new IllegalArgumentException("Den nye adgangskode skal være forskellig fra den gamle");
         }
 
-        currentUser.setPasswordHash(passwordEncoder.encode(newPassword));
+        currentUser.changePasswordHash(passwordEncoder.encode(newPassword));
         userRepository.update(currentUser);
     }
 

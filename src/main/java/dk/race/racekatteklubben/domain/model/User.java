@@ -26,7 +26,7 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
+    public void assignId(int id) {
         this.id = id;
     }
 
@@ -50,7 +50,7 @@ public class User {
         return passwordHash;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public void changePasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
 
@@ -58,23 +58,11 @@ public class User {
         return signUpDate;
     }
 
-    public void setSignUpDate(LocalDate signUpDate) {
-        this.signUpDate = signUpDate;
-    }
-
     public Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public List<Pet> getPets() {
         return pets;
-    }
-
-    public void setPets(List<Pet> pets) {
-        this.pets = pets;
     }
 }

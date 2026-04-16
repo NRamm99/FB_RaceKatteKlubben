@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
         }, keyHolder);
 
         if (keyHolder.getKey() != null) {
-            user.setId(keyHolder.getKey().intValue());
+            user.assignId(keyHolder.getKey().intValue());
         }
     }
 

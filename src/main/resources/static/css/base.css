@@ -40,20 +40,39 @@ body {
     object-fit: cover;
 }
 
-.btn {
+.btn,
+.loginbtn {
     display: inline-block;
     padding: 12px 24px;
-    background-color: #a7333f;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, #b6424e 0%, #922c38 100%);
     color: white;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 10px 20px rgba(72, 18, 24, 0.28);
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
 }
 
-button.btn {
+button.btn,
+button.loginbtn {
     border: none;
     cursor: pointer;
     font: inherit;
+}
+
+.btn:hover,
+.loginbtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 24px rgba(72, 18, 24, 0.34);
+    background: linear-gradient(180deg, #c14d5a 0%, #9d313d 100%);
+}
+
+.btn:active,
+.loginbtn:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 14px rgba(72, 18, 24, 0.24);
 }
 
 .title {
@@ -70,7 +89,7 @@ button.btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 22px;
     padding: 18px 28px;
     box-sizing: border-box;
     background: rgba(24, 10, 10, 0.72);
@@ -93,7 +112,7 @@ button.btn {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 16px;
     flex: 1;
     position: relative;
     padding-right: 190px;

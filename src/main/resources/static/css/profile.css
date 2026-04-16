@@ -75,6 +75,18 @@
     text-align: left;
 }
 
+.upcoming-event-card .btn,
+.upcoming-event-card form,
+.profile-account-actions .btn,
+.profile-account-actions form {
+    margin-top: 12px;
+}
+
+.upcoming-event-card form,
+.profile-account-actions form {
+    display: block;
+}
+
 .upcoming-events-empty {
     display: flex;
     justify-content: space-between;
