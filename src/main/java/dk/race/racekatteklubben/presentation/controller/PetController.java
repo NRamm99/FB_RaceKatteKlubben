@@ -125,6 +125,29 @@ public class PetController {
         }
     }
 
+    @PostMapping("/pets/delete")
+    public String deletePet(@RequestParam int id,
+                            HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Pet pet = petService.getPetById(id);
+
+            if (pet.getOwnerId() != user.getId()) {
+                return "redirect:/profile?notOwner";
+            }
+
+            petService.deletePet(id);
+            return "redirect:/profile?petDeleted";
+        } catch (IllegalArgumentException ex) {
+            return "redirect:/profile?petDeleteError";
+        }
+    }
+
     @GetMapping("/pets/all")
     public String showAllCats(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");

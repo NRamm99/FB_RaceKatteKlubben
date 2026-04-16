@@ -122,4 +122,17 @@ public class ProfileController {
             return "change-password";
         }
     }
+
+    @PostMapping("/profile/delete")
+    public String deleteAccount(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        userService.deleteUser(loggedInUser);
+        session.invalidate();
+        return "redirect:/index";
+    }
 }

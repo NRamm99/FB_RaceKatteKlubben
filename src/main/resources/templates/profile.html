@@ -39,6 +39,9 @@
                 <div class="profile-account-actions">
                     <a th:href="@{/profile/edit}" class="btn">Rediger bruger</a>
                     <a th:href="@{/profile/change-password}" class="btn">Skift adgangskode</a>
+                    <form th:action="@{/profile/delete}" method="post">
+                        <button class="btn" type="submit">Slet konto</button>
+                    </form>
                 </div>
             </div>
 
@@ -54,6 +57,10 @@
                     <p class="cat-line" th:text="'Navn: ' + ${pet.name}"></p>
                     <p class="cat-line" th:text="'Race: ' + ${pet.race.displayName}"></p>
                     <a class="btn" th:href="@{/pets/edit-pet(id=${pet.id})}">Rediger kat</a>
+                    <form th:action="@{/pets/delete}" method="post">
+                        <input type="hidden" name="id" th:value="${pet.id}">
+                        <button class="btn" type="submit">Slet kat</button>
+                    </form>
                 </div>
             </div>
 
