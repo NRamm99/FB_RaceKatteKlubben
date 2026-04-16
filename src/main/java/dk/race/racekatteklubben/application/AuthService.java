@@ -20,6 +20,7 @@ public class AuthService {
     }
 
     public void register(User user, String rawPassword) {
+        normalizeUserIdentity(user);
         userValidator.validateUserForRegister(user, rawPassword);
 
         if (userRepository.findByUsername(user.getUsername()) != null) {
@@ -53,5 +54,19 @@ public class AuthService {
         }
 
         return user;
+    }
+
+    private void normalizeUserIdentity(User user) {
+        if (user == null) {
+            return;
+        }
+
+        if (user.getUsername() != null) {
+            user.changeUsername(user.getUsername().trim());
+        }
+
+        if (user.getEmail() != null) {
+            user.changeEmail(user.getEmail().trim().toLowerCase());
+        }
     }
 }

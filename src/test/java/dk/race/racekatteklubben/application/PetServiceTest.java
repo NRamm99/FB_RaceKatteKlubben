@@ -9,8 +9,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PetServiceTest {
+
+    @Test
+    void petNormalizesNameOnCreation() {
+        Pet pet = new Pet(1, "  Luna   Belle  ", Race.MAINE_COON, 1);
+
+        assertEquals("Luna Belle", pet.getName());
+    }
+
+    @Test
+    void petRejectsInvalidName() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Pet(1, "Luna123", Race.MAINE_COON, 1)
+        );
+
+        assertEquals("Kattens navn må kun indeholde bogstaver, mellemrum og bindestreg", exception.getMessage());
+    }
+
+    @Test
+    void changeNameValidatesAndNormalizes() {
+        Pet pet = new Pet(1, "Luna", Race.MAINE_COON, 1);
+
+        pet.changeName("  Bella   Rose ");
+
+        assertEquals("Bella Rose", pet.getName());
+    }
 
     @Test
     void searchPetsMatchesNameAndRaceIgnoringCase() {

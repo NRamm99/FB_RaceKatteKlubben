@@ -20,16 +20,11 @@ public class UserValidator {
             throw new IllegalArgumentException("Brugernavn må ikke være tomt");
         }
 
-        user.changeUsername(user.getUsername().trim());
-
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             throw new IllegalArgumentException("E-mail må ikke være tom");
         }
 
-        String normalizedEmail = user.getEmail().trim().toLowerCase();
-        user.changeEmail(normalizedEmail);
-
-        if (!EMAIL_PATTERN.matcher(normalizedEmail).matches()) {
+        if (!EMAIL_PATTERN.matcher(user.getEmail()).matches()) {
             throw new IllegalArgumentException("E-mailadressen er ikke gyldig");
         }
     }

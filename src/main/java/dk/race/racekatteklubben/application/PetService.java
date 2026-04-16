@@ -20,20 +20,23 @@ public class PetService {
     }
 
     public void createPet(Pet pet) {
-        validatePet(pet);
-        normalizePetName(pet);
+        if (pet == null) {
+            throw new IllegalArgumentException("Oplysninger om katten mangler");
+        }
+
         petRepository.save(pet);
     }
 
     public void updatePet(Pet pet) {
-        validatePet(pet);
+        if (pet == null) {
+            throw new IllegalArgumentException("Oplysninger om katten mangler");
+        }
 
         Pet existingPet = petRepository.findById(pet.getId());
         if (existingPet == null) {
             throw new IllegalArgumentException("Katten blev ikke fundet");
         }
 
-        normalizePetName(pet);
         petRepository.update(pet);
     }
 
@@ -105,46 +108,5 @@ public class PetService {
             }
         }
         return ownerIdToUsername;
-    }
-
-    private void validatePet(Pet pet) {
-        if (pet == null) {
-            throw new IllegalArgumentException("Oplysninger om katten mangler");
-        }
-
-        if (pet.getName() == null || pet.getName().isBlank()) {
-            throw new IllegalArgumentException("Katten skal have et navn");
-        }
-
-        String normalizedName = pet.getName().trim().replaceAll("\\s+", " ");
-
-        if (!normalizedName.matches("^[A-Za-zÆØÅæøå\\- ]+$")){
-            throw new IllegalArgumentException("Kattens navn må kun indeholde bogstaver, mellemrum og bindestreg");
-        }
-
-        if (normalizedName.contains("--")){
-            throw new IllegalArgumentException("Kattens navn må ikke indeholde flere bindestreger i træk");
-        }
-
-        if (normalizedName.startsWith("-")){
-            throw new IllegalArgumentException("Kattens navn må ikke starte med bindestreg");
-        }
-
-        if (normalizedName.endsWith("-")){
-            throw new IllegalArgumentException("Kattens navn må ikke ende med bindestreg");
-        }
-
-        if (pet.getRace() == null) {
-            throw new IllegalArgumentException("Katten skal have en race");
-        }
-
-        if (pet.getOwnerId() <= 0) {
-            throw new IllegalArgumentException("Katten skal være knyttet til en gyldig ejer");
-        }
-    }
-
-    private void normalizePetName(Pet pet) {
-        String normalizedName = pet.getName().trim().replaceAll("\\s+", " ");
-        pet.changeName(normalizedName);
     }
 }

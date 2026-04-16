@@ -23,6 +23,7 @@ public class UserService {
     }
 
     public void editUser(User user, String rawPassword) {
+        normalizeUserIdentity(user);
         userValidator.validateUserForWrite(user);
         userValidator.validateRawPassword(rawPassword);
 
@@ -44,6 +45,7 @@ public class UserService {
 
         currentUser.changeUsername(username);
         currentUser.changeEmail(email);
+        normalizeUserIdentity(currentUser);
 
         userValidator.validateUserForWrite(currentUser);
 
@@ -138,5 +140,19 @@ public class UserService {
                         user.getUsername().toLowerCase(Locale.ROOT).contains(normalizedQuery)
                                 || user.getEmail().toLowerCase(Locale.ROOT).contains(normalizedQuery))
                 .toList();
+    }
+
+    private void normalizeUserIdentity(User user) {
+        if (user == null) {
+            return;
+        }
+
+        if (user.getUsername() != null) {
+            user.changeUsername(user.getUsername().trim());
+        }
+
+        if (user.getEmail() != null) {
+            user.changeEmail(user.getEmail().trim().toLowerCase());
+        }
     }
 }
