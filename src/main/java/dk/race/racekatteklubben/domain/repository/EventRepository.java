@@ -3,6 +3,7 @@ package dk.race.racekatteklubben.domain.repository;
 import dk.race.racekatteklubben.domain.model.Event;
 import dk.race.racekatteklubben.domain.model.Pet;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventRepository {
@@ -15,7 +16,7 @@ public interface EventRepository {
 
     public List<Event> getEvents();
 
-    public List<Event> getUpcomingEventsByOwnerId(int ownerId);
+    public List<Event> getUpcomingEventsByOwnerId(int ownerId, LocalDateTime fromDateTime);
 
     public Event getEventById(int id);
 

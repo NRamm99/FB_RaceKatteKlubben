@@ -99,6 +99,22 @@ class EventServiceTest {
     }
 
     @Test
+    void getUpcomingEventsByOwnerIdReturnsRepositoryResult() {
+        InMemoryEventRepository repository = new InMemoryEventRepository();
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(4, "Race Day");
+        repository.upcomingEventsToReturn.add(event);
+
+        List<Event> upcomingEvents = eventService.getUpcomingEventsByOwnerId(1);
+
+        assertEquals(1, upcomingEvents.size());
+        assertEquals(event, upcomingEvents.get(0));
+        assertEquals(1, repository.lastUpcomingEventsOwnerId);
+        assertNotNull(repository.lastUpcomingEventsFromDateTime);
+    }
+
+    @Test
     void addAttendingPetCallsRepository() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
         InMemoryPetRepository petRepository = new InMemoryPetRepository();
@@ -212,6 +228,9 @@ class EventServiceTest {
         private final List<Pet> attendingPetsToReturn = new ArrayList<>();
         private final List<PetEventLink> addedPetEventLinks = new ArrayList<>();
         private final List<PetEventLink> removedPetEventLinks = new ArrayList<>();
+        private final List<Event> upcomingEventsToReturn = new ArrayList<>();
+        private Integer lastUpcomingEventsOwnerId;
+        private LocalDateTime lastUpcomingEventsFromDateTime;
 
         @Override
         public void addEvent(Event event) {
@@ -234,8 +253,10 @@ class EventServiceTest {
         }
 
         @Override
-        public List<Event> getUpcomingEventsByOwnerId(int ownerId) {
-            return List.of();
+        public List<Event> getUpcomingEventsByOwnerId(int ownerId, LocalDateTime fromDateTime) {
+            lastUpcomingEventsOwnerId = ownerId;
+            lastUpcomingEventsFromDateTime = fromDateTime;
+            return List.copyOf(upcomingEventsToReturn);
         }
 
         @Override

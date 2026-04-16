@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -77,18 +78,27 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public List<Event> getUpcomingEventsByOwnerId(int ownerId) {
+    public List<Event> getUpcomingEventsByOwnerId(int ownerId, LocalDateTime fromDateTime) {
         String sql = """
                 SELECT DISTINCT e.id, e.owner_id, e.title, e.description, e.event_date
                 FROM events e
-                JOIN pet_in_event pie ON e.id = pie.event_id
-                JOIN pets p ON p.id = pie.pet_id
-                WHERE p.owner_id = ?
-                  AND e.event_date >= NOW()
+                WHERE e.event_date >= ?
+                  AND EXISTS (
+                      SELECT 1
+                      FROM pet_in_event pie
+                      JOIN pets p ON p.id = pie.pet_id
+                      WHERE pie.event_id = e.id
+                        AND p.owner_id = ?
+                  )
                 ORDER BY e.event_date ASC;
                 """;
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToEvent(rs), ownerId);
+        return jdbcTemplate.query(
+                sql,
+                (rs, rowNum) -> mapRowToEvent(rs),
+                Timestamp.valueOf(fromDateTime),
+                ownerId
+        );
     }
 
     @Override

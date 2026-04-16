@@ -84,7 +84,7 @@ public class EventService {
             throw new IllegalArgumentException("Ugyldigt ejer-id");
         }
 
-        return eventRepository.getUpcomingEventsByOwnerId(ownerId);
+        return eventRepository.getUpcomingEventsByOwnerId(ownerId, LocalDateTime.now());
     }
 
     public void addAttendingPet(int eventId, int petId) {

@@ -1,12 +1,13 @@
 .login-wrapper {
     position: absolute;
-    top: 54%;
+    top: 108px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
+    width: min(100%, calc(100vw - 32px));
 }
 
 .login-wrapper h1 {
@@ -19,7 +20,7 @@
 
 .login-form {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     background-color: #ef9157;
@@ -27,6 +28,8 @@
     padding: 20px;
     border-radius: 10px;
     width: min(540px, calc(100vw - 40px));
+    max-height: 70vh;
+    overflow-y: auto;
     box-sizing: border-box;
 }
 
@@ -36,6 +39,19 @@
     color: white;
     font-weight: 700;
     text-align: left;
+}
+
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.event-form input,
+.event-form button {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .field {
@@ -73,5 +89,9 @@ textarea.field {
         position: static;
         transform: none;
         padding: 0 16px 24px;
+    }
+
+    .login-form {
+        max-height: none;
     }
 }
