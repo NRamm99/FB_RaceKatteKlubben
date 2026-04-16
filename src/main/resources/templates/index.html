@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/home.css}">
     <meta charset="UTF-8">
-    <title>Landing Page</title>
+    <title>Forside</title>
 </head>
 <body>
 <section class="banner-container">
+    <nav class="app-nav">
+        <a th:href="@{/index}" class="app-nav-brand">RaceKatteKlubben</a>
+    </nav>
+
     <h1>Velkommen til (Katte)dralen</h1>
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
     <div class="button-container">
-        <a th:href="@{/login}" class="btn">Login</a>
-        <a th:href="@{/register}" class="btn">Register</a>
+        <a th:href="@{/login}" class="btn">Log ind</a>
+        <a th:href="@{/register}" class="btn">Registrer</a>
     </div>
 </section>
 </body>

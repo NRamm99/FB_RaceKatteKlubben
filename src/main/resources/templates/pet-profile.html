@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
-    <title>Alle katte</title>
+    <title>Katteprofil</title>
 </head>
 <body>
 
@@ -28,23 +28,17 @@
 
     <div class="login-wrapper">
         <div class="login-form">
-            <h1 class="title">Alle katte</h1>
+            <h1 class="title">Katteprofil</h1>
 
-            <div th:if="${#lists.isEmpty(pets)}" class="upcoming-events-empty">
-                <p class="field">Ingen katte fundet.</p>
-            </div>
-
-            <div th:if="${!#lists.isEmpty(pets)}" class="upcoming-events-list">
-                <div th:each="pet : ${pets}" class="upcoming-event-card">
-                    <p class="cat-line" th:text="'Navn: ' + ${pet.name}"></p>
-                    <p class="cat-line" th:text="'Race: ' + ${pet.race.displayName}"></p>
-                    <p class="cat-line"
-                       th:text="${'Ejer: ' + (ownerUsernames[pet.ownerId] != null ? ownerUsernames[pet.ownerId] : 'Ukendt')}"></p>
-                </div>
+            <div class="profile-info">
+                <p class="field" th:text="'Navn: ' + ${pet.name}"></p>
+                <p class="field" th:text="'Race: ' + ${pet.race.displayName}"></p>
+                <p class="field" th:text="'Ejer: ' + ${owner.username}"></p>
             </div>
 
             <div class="profile-buttons">
-                <a th:href="@{/profile}" class="btn">Tilbage til profil</a>
+                <a th:href="@{/users/{id}(id=${owner.id})}" class="btn">Se ejer</a>
+                <a th:href="@{/search}" class="btn">Tilbage til søgning</a>
             </div>
         </div>
     </div>

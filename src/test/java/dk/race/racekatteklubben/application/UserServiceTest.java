@@ -121,6 +121,58 @@ class UserServiceTest {
         assertEquals(secondUser, users.get(1));
     }
 
+    @Test
+    void findUserByIdReturnsMatchingUser() {
+        InMemoryUserRepository repository = new InMemoryUserRepository();
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
+        User firstUser = createUser("first@example.com");
+        User secondUser = new User(
+                2,
+                "secondowner",
+                "second@example.com",
+                "another-password",
+                LocalDate.now(),
+                Role.USER,
+                List.of()
+        );
+        repository.save(firstUser);
+        repository.save(secondUser);
+
+        User foundUser = userService.findUserById(2);
+
+        assertEquals(secondUser, foundUser);
+    }
+
+    @Test
+    void searchUsersMatchesUsernameAndEmailIgnoringCase() {
+        InMemoryUserRepository repository = new InMemoryUserRepository();
+        UserValidator userValidator = new UserValidator();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
+        User firstUser = createUser("first@example.com");
+        User secondUser = new User(
+                2,
+                "MaineFan",
+                "second@example.com",
+                "another-password",
+                LocalDate.now(),
+                Role.USER,
+                List.of()
+        );
+        repository.save(firstUser);
+        repository.save(secondUser);
+
+        List<User> usernameMatches = userService.searchUsers("maine");
+        List<User> emailMatches = userService.searchUsers("FIRST@EXAMPLE");
+
+        assertEquals(1, usernameMatches.size());
+        assertEquals(secondUser, usernameMatches.get(0));
+        assertEquals(1, emailMatches.size());
+        assertEquals(firstUser, emailMatches.get(0));
+    }
+
     private static User createUser(String email) {
         return new User(
                 1,

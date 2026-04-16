@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/events.css}">
@@ -8,8 +8,22 @@
 </head>
 <body>
 <section class="banner-container">
+    <nav class="app-nav">
+        <a th:href="@{/profile}" class="app-nav-brand">RaceKatteKlubben</a>
+        <div class="app-nav-links">
+            <a th:href="@{/profile}" class="btn">Profil</a>
+            <a th:href="@{/search}" class="btn">Søg</a>
+            <a th:href="@{/pets/create}" class="btn">Tilføj kat</a>
+            <a th:href="@{/pets/all}" class="btn">Alle katte</a>
+            <a th:href="@{/events}" class="btn">Begivenheder</a>
+            <form class="app-nav-logout" th:action="@{/logout}" method="post">
+                <button class="btn" type="submit">Log ud</button>
+            </form>
+        </div>
+    </nav>
+
     <h1>Kommende begivenheder</h1>
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="events-wrapper">
         <div class="events-header">
@@ -28,10 +42,10 @@
 
         <div class="events-list" th:if="${not #lists.isEmpty(events)}">
             <article class="event-card" th:each="event : ${events}">
-                <h2 th:text="${event.title}">Event title</h2>
+                <h2 th:text="${event.title}">Begivenhedstitel</h2>
                 <span class="event-meta"
                       th:text="${#temporals.format(event.dateTime, 'dd MMM yyyy HH:mm')}">01 Jan 2026 12:00</span>
-                <p th:text="${event.description}">Event description</p>
+                <p th:text="${event.description}">Beskrivelse af begivenhed</p>
                 <div class="event-card-actions">
                     <a th:href="@{/events/{eventId}/participate(eventId=${event.id})}" class="btn">Deltag</a>
                     <a th:if="${event.ownerId == currentUserId}"

@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <link rel="stylesheet" th:href="@{/css/events.css}">
     <meta charset="UTF-8">
-    <title>Opret Begivenhed</title>
+    <title>Opret begivenhed</title>
 </head>
 <body>
 <section class="banner-container">
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <nav class="app-nav">
+        <a th:href="@{/profile}" class="app-nav-brand">RaceKatteKlubben</a>
+        <div class="app-nav-links">
+            <a th:href="@{/profile}" class="btn">Profil</a>
+            <a th:href="@{/search}" class="btn">Søg</a>
+            <a th:href="@{/pets/create}" class="btn">Tilføj kat</a>
+            <a th:href="@{/pets/all}" class="btn">Alle katte</a>
+            <a th:href="@{/events}" class="btn">Begivenheder</a>
+            <form class="app-nav-logout" th:action="@{/logout}" method="post">
+                <button class="btn" type="submit">Log ud</button>
+            </form>
+        </div>
+    </nav>
+
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="login-wrapper">
         <form th:action="@{/events/create}" method="post" class="login-form event-create-form">

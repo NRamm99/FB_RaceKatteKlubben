@@ -1,6 +1,6 @@
 .login-wrapper {
     position: absolute;
-    top: 50%;
+    top: 54%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -26,4 +26,14 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
     padding: 20px;
     border-radius: 10px;
+    width: min(540px, calc(100vw - 40px));
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .login-wrapper {
+        position: static;
+        transform: none;
+        padding: 0 16px 24px;
+    }
 }

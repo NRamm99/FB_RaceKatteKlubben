@@ -1,6 +1,6 @@
 .events-wrapper {
     position: absolute;
-    top: 52%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: min(960px, calc(100% - 48px));
@@ -158,4 +158,19 @@
 
 .pet-selection-race {
     opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .events-wrapper {
+        position: static;
+        transform: none;
+        width: auto;
+        max-height: none;
+        margin: 0 16px 24px;
+    }
+
+    .events-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }

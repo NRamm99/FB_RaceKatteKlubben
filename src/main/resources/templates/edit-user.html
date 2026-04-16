@@ -1,25 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <link rel="stylesheet" th:href="@{/css/base.css}">
   <link rel="stylesheet" th:href="@{/css/forms.css}">
   <meta charset="UTF-8">
-  <title>Edit user</title>
+  <title>Rediger bruger</title>
 </head>
 <body>
 
 <section class="banner-container">
-  <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+  <nav class="app-nav">
+    <a th:href="@{/profile}" class="app-nav-brand">RaceKatteKlubben</a>
+    <div class="app-nav-links">
+      <a th:href="@{/profile}" class="btn">Profil</a>
+      <a th:href="@{/search}" class="btn">Søg</a>
+      <a th:href="@{/pets/all}" class="btn">Alle katte</a>
+      <a th:href="@{/events}" class="btn">Begivenheder</a>
+      <form class="app-nav-logout" th:action="@{/logout}" method="post">
+        <button class="btn" type="submit">Log ud</button>
+      </form>
+    </div>
+  </nav>
+
+  <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
   <div class="login-wrapper">
     <form th:action="@{/profile/edit}" method="post" class="login-form">
-      <h1 class="title">Edit user</h1>
+      <h1 class="title">Rediger bruger</h1>
 
-      <!-- Error message -->
       <p th:if="${error}" style="color:red;" th:text="${error}"></p>
 
-      <!-- User info -->
-      <label class="label" for="username">Username</label>
+      <label class="label" for="username">Brugernavn</label>
       <input class="field" id="username" type="text" name="username"
              th:value="${user.username}" required>
 
@@ -27,9 +38,8 @@
       <input class="field" id="email" type="email" name="email"
              th:value="${user.email}" required>
 
-      <!-- Buttons -->
-      <button class="loginbtn" type="submit">Save</button>
-      <a th:href="@{/profile}" class="btn">Cancel</a>
+      <button class="loginbtn" type="submit">Gem</button>
+      <a th:href="@{/profile}" class="btn">Annuller</a>
     </form>
   </div>
 </section>

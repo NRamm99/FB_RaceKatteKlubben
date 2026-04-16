@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
-    <title>Alle katte</title>
+    <title>Søg</title>
 </head>
 <body>
 
@@ -28,8 +28,28 @@
 
     <div class="login-wrapper">
         <div class="login-form">
-            <h1 class="title">Alle katte</h1>
+            <h1 class="title">Søg</h1>
 
+            <form th:action="@{/search}" method="get" class="event-form">
+                <label for="q" class="field">Søg efter brugere eller katte</label>
+                <input id="q" name="q" type="text" th:value="${query}" placeholder="Navn, e-mail eller race">
+                <button type="submit" class="btn">Søg</button>
+            </form>
+
+            <h2 class="section-title">Brugere</h2>
+            <div th:if="${#lists.isEmpty(users)}" class="upcoming-events-empty">
+                <p class="field">Ingen brugere fundet.</p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(users)}" class="upcoming-events-list">
+                <div th:each="user : ${users}" class="upcoming-event-card">
+                    <p class="cat-line" th:text="'Brugernavn: ' + ${user.username}"></p>
+                    <p class="cat-line" th:text="'E-mail: ' + ${user.email}"></p>
+                    <a class="btn" th:href="@{/users/{id}(id=${user.id})}">Se profil</a>
+                </div>
+            </div>
+
+            <h2 class="section-title">Katte</h2>
             <div th:if="${#lists.isEmpty(pets)}" class="upcoming-events-empty">
                 <p class="field">Ingen katte fundet.</p>
             </div>
@@ -40,6 +60,7 @@
                     <p class="cat-line" th:text="'Race: ' + ${pet.race.displayName}"></p>
                     <p class="cat-line"
                        th:text="${'Ejer: ' + (ownerUsernames[pet.ownerId] != null ? ownerUsernames[pet.ownerId] : 'Ukendt')}"></p>
+                    <a class="btn" th:href="@{/pets/{id}(id=${pet.id})}">Se profil</a>
                 </div>
             </div>
 

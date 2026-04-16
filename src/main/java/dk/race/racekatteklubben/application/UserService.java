@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class UserService {
@@ -111,5 +112,31 @@ public class UserService {
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    public User findUserById(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Ugyldig bruger");
+        }
+
+        return userRepository.findAll().stream()
+                .filter(user -> user != null && user.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Brugeren blev ikke fundet"));
+    }
+
+    public List<User> searchUsers(String query) {
+        if (query == null || query.isBlank()) {
+            return findAllUsers();
+        }
+
+        String normalizedQuery = query.trim().toLowerCase(Locale.ROOT);
+
+        return userRepository.findAll().stream()
+                .filter(user -> user != null)
+                .filter(user ->
+                        user.getUsername().toLowerCase(Locale.ROOT).contains(normalizedQuery)
+                                || user.getEmail().toLowerCase(Locale.ROOT).contains(normalizedQuery))
+                .toList();
     }
 }

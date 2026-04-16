@@ -1,35 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Log ind</title>
 </head>
 <body>
 
 <section class="banner-container">
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <nav class="app-nav">
+        <a th:href="@{/index}" class="app-nav-brand">RaceKatteKlubben</a>
+    </nav>
+
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="login-wrapper">
         <form th:action="@{/login}" method="post" class="login-form">
-            <h1 class="title">Login</h1>
+            <h1 class="title">Log ind</h1>
 
-            <!-- Username -->
-            <label class="label" for="username">Username</label>
+            <label class="label" for="username">Brugernavn</label>
             <input class="field" id="username" type="text" name="username" required>
 
-            <!-- Password -->
-            <label class="label" for="password">Password</label>
+            <label class="label" for="password">Adgangskode</label>
             <input class="field" id="password" type="password" name="password" required>
 
-            <button class="loginbtn" type="submit">Login</button>
+            <button class="loginbtn" type="submit">Log ind</button>
 
-            <p th:if="${param.error}" style="color:red;">Invalid username or password</p>
-            <p th:if="${param.logout}" style="color:green;">You have been logged out</p>
+            <p th:if="${param.error}" style="color:red;">Ugyldigt brugernavn eller adgangskode</p>
+            <p th:if="${param.logout}" style="color:green;">Du er blevet logget ud</p>
 
-            <a th:href="@{/index}" class="btn">Go back</a>
-
+            <a th:href="@{/index}" class="btn">Gå tilbage</a>
         </form>
     </div>
 

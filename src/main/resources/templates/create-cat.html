@@ -1,42 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <meta charset="UTF-8">
-    <title>Add Cat</title>
+    <title>Tilføj kat</title>
 </head>
 <body>
 
 <section class="banner-container">
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <nav class="app-nav">
+        <a th:href="@{/profile}" class="app-nav-brand">RaceKatteKlubben</a>
+        <div class="app-nav-links">
+            <a th:href="@{/profile}" class="btn">Profil</a>
+            <a th:href="@{/search}" class="btn">Søg</a>
+            <a th:href="@{/pets/all}" class="btn">Alle katte</a>
+            <a th:href="@{/events}" class="btn">Begivenheder</a>
+            <form class="app-nav-logout" th:action="@{/logout}" method="post">
+                <button class="btn" type="submit">Log ud</button>
+            </form>
+        </div>
+    </nav>
+
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="login-wrapper">
         <form th:action="@{/pets/create}" method="post" class="login-form">
-            <h1 class="title">Add Cat</h1>
+            <h1 class="title">Tilføj kat</h1>
 
-            <!-- Spring Security CSRF token (required when CSRF is enabled) -->
             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-            <!-- Cat Name -->
-            <label class="label" for="name">Cat name</label>
+            <label class="label" for="name">Kattens navn</label>
             <input class="field" id="name" type="text" name="name" required>
 
-            <!-- Race -->
             <label class="label" for="race">Race</label>
             <select class="field" id="race" name="race" required>
-                <option value="" disabled selected>Select race</option>
+                <option value="" disabled selected>Vælg race</option>
                 <option th:each="race : ${races}"
-                        th:value="${race}"
-                        th:text="${race}">
+                        th:value="${race.name()}"
+                        th:text="${race.displayName}">
                 </option>
             </select>
 
-            <button class="loginbtn" type="submit">Save cat</button>
+            <button class="loginbtn" type="submit">Gem kat</button>
 
-            <p th:if="${param.error}" style="color:red;">Could not create cat</p>
+            <p th:if="${param.error}" style="color:red;">Kunne ikke oprette kat</p>
 
-            <a th:href="@{/profile}" class="btn">Back to profile</a>
+            <a th:href="@{/profile}" class="btn">Tilbage til profil</a>
         </form>
     </div>
 

@@ -1,54 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <link rel="stylesheet" th:href="@{/css/base.css}">
     <link rel="stylesheet" th:href="@{/css/forms.css}">
     <link rel="stylesheet" th:href="@{/css/profile.css}">
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <title>Profil</title>
 </head>
 <body>
 
 <section class="banner-container">
-    <img th:src="@{/images/FrontCat.png}" alt="Fluffy cat">
+    <nav class="app-nav">
+        <a th:href="@{/profile}" class="app-nav-brand">RaceKatteKlubben</a>
+        <div class="app-nav-links">
+            <a th:href="@{/profile}" class="btn">Profil</a>
+            <a th:href="@{/search}" class="btn">Søg</a>
+            <a th:href="@{/pets/create}" class="btn">Tilføj kat</a>
+            <a th:href="@{/pets/all}" class="btn">Alle katte</a>
+            <a th:href="@{/events}" class="btn">Begivenheder</a>
+            <form class="app-nav-logout" th:action="@{/logout}" method="post">
+                <button class="btn" type="submit">Log ud</button>
+            </form>
+        </div>
+    </nav>
+
+    <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="login-wrapper">
         <div class="login-form">
-            <h1 class="title">Profile</h1>
+            <h1 class="title">Profil</h1>
 
             <div class="profile-header">
-                <!-- User info -->
                 <div class="profile-info">
-                    <!-- Username -->
-                    <p class="field" th:text="'Username: ' + ${user.username}"></p>
-
-                    <!-- Email -->
-                    <p class="field" th:text="'Email: ' + ${user.email}"></p>
+                    <p class="field" th:text="'Brugernavn: ' + ${user.username}"></p>
+                    <p class="field" th:text="'E-mail: ' + ${user.email}"></p>
                 </div>
 
                 <div class="profile-account-actions">
-                    <a th:href="@{/profile/edit}" class="btn">Edit user</a>
-                    <a th:href="@{/profile/change-password}" class="btn">Change password</a>
+                    <a th:href="@{/profile/edit}" class="btn">Rediger bruger</a>
+                    <a th:href="@{/profile/change-password}" class="btn">Skift adgangskode</a>
                 </div>
             </div>
 
-            <!-- Cats -->
             <h2 class="section-title">Mine katte</h2>
 
             <div th:if="${#lists.isEmpty(pets)}" class="upcoming-events-empty">
-                <p class="field">You have no cats yet.</p>
-                <a th:href="@{/pets/create}" class="btn">Add cat</a>
+                <p class="field">Du har ingen katte endnu.</p>
+                <a th:href="@{/pets/create}" class="btn">Tilføj kat</a>
             </div>
 
             <div th:if="${!#lists.isEmpty(pets)}" class="upcoming-events-list">
                 <div th:each="pet : ${pets}" class="upcoming-event-card">
-                    <p class="cat-line" th:text="'Name: ' + ${pet.name}"></p>
-                    <p class="cat-line" th:text="'Race: ' + ${pet.race}"></p>
-                    <a class="btn" th:href="@{/pets/edit-pet(id=${pet.id})}">Edit cat</a>
+                    <p class="cat-line" th:text="'Navn: ' + ${pet.name}"></p>
+                    <p class="cat-line" th:text="'Race: ' + ${pet.race.displayName}"></p>
+                    <a class="btn" th:href="@{/pets/edit-pet(id=${pet.id})}">Rediger kat</a>
                 </div>
             </div>
 
-            <!-- Events -->
             <h2 class="section-title">Kommende begivenheder</h2>
 
             <div th:if="${#lists.isEmpty(upcomingEvents)}" class="upcoming-events-empty">
@@ -65,16 +73,6 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
-            <div class="profile-buttons">
-                <a th:href="@{/pets/create}" class="btn">Add cat</a>
-                <a th:href="@{/pets/all}" class="btn">Show all cats</a>
-                <a th:href="@{/events}" class="btn">Events</a>
-
-                <form th:action="@{/logout}" method="post">
-                    <button class="btn" type="submit">Log out</button>
-                </form>
-            </div>
         </div>
     </div>
 

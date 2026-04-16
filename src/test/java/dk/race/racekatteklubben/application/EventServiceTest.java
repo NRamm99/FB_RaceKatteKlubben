@@ -31,6 +31,7 @@ class EventServiceTest {
         InMemoryEventRepository repository = new InMemoryEventRepository();
         EventService eventService = new EventService(repository);
         Event event = createEvent(1, "Cat Show");
+        repository.savedEvents.add(event);
 
         assertDoesNotThrow(() -> eventService.removeEvent(event));
 
@@ -120,6 +121,7 @@ class EventServiceTest {
     private static Event createEvent(int id, String title) {
         Event event = new Event(
                 id,
+                1,
                 title,
                 "A lovely cat event",
                 LocalDateTime.of(2026, 5, 20, 14, 30)
@@ -173,12 +175,12 @@ class EventServiceTest {
         }
 
         @Override
-        public void addAttendingPet(int eventId, int petId) {
+        public void addAttendingPet(int petId, int eventId) {
             addedPetEventLinks.add(new PetEventLink(eventId, petId));
         }
 
         @Override
-        public void removeAttendingPet(int eventId, int petId) {
+        public void removeAttendingPet(int petId, int eventId) {
             removedPetEventLinks.add(new PetEventLink(eventId, petId));
         }
 

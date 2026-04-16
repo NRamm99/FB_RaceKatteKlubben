@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -72,6 +73,21 @@ public class PetService {
 
     public List<Pet> getAllPets() {
         return petRepository.findAll();
+    }
+
+    public List<Pet> searchPets(String query) {
+        if (query == null || query.isBlank()) {
+            return getAllPets();
+        }
+
+        String normalizedQuery = query.trim().toLowerCase(Locale.ROOT);
+
+        return petRepository.findAll().stream()
+                .filter(pet -> pet != null)
+                .filter(pet ->
+                        pet.getName().toLowerCase(Locale.ROOT).contains(normalizedQuery)
+                                || pet.getRace().name().toLowerCase(Locale.ROOT).replace('_', ' ').contains(normalizedQuery))
+                .toList();
     }
 
     /**
