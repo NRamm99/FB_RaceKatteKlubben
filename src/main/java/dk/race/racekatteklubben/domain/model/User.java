@@ -1,7 +1,6 @@
 package dk.race.racekatteklubben.domain.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class User {
     private int id;
@@ -10,16 +9,14 @@ public class User {
     private String passwordHash;
     private LocalDate signUpDate;
     private Role role;
-    private List<Pet> pets;
 
-    public User(int id, String username, String email, String passwordHash, LocalDate signUpDate,Role role, List<Pet> pets) {
+    public User(int id, String username, String email, String passwordHash, LocalDate signUpDate, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
         this.signUpDate = signUpDate;
         this.role = role;
-        this.pets = pets;
     }
 
     public int getId() {
@@ -60,9 +57,5 @@ public class User {
 
     public Role getRole() {
         return role;
-    }
-
-    public List<Pet> getPets() {
-        return pets;
     }
 }

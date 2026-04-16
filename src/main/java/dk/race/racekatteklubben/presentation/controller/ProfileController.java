@@ -80,8 +80,7 @@ public class ProfileController {
                     email,
                     loggedinUser.getPasswordHash(),
                     loggedinUser.getSignUpDate(),
-                    loggedinUser.getRole(),
-                    loggedinUser.getPets()
+                    loggedinUser.getRole()
             );
 
             model.addAttribute("user", formUser);
@@ -117,7 +116,7 @@ public class ProfileController {
             userService.changePassword(loggedinUser, oldPassword, newPassword, repeatPassword);
             session.setAttribute("loggedInUser", loggedinUser);
             return "redirect:/profile";
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             return "change-password";
         }

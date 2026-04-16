@@ -1,5 +1,8 @@
 package dk.race.racekatteklubben.domain.model;
 
+import dk.race.racekatteklubben.domain.exception.PetAlreadyAttendingException;
+import dk.race.racekatteklubben.domain.exception.PetNotFoundException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +42,29 @@ public class Event {
     }
 
     public void addAttendingPet(Pet pet) {
+        if (pet == null || pet.getId() <= 0) {
+            throw new PetNotFoundException("Katten blev ikke fundet");
+        }
+
+        boolean isAlreadyAttending = attendingPets.stream()
+                .anyMatch(attendingPet -> attendingPet.getId() == pet.getId());
+
+        if (isAlreadyAttending) {
+            throw new PetAlreadyAttendingException("Katten er allerede tilmeldt");
+        }
+
         this.attendingPets.add(pet);
     }
 
     public void removeAttendingPet(Pet pet) {
-        this.attendingPets.remove(pet);
+        if (pet == null || pet.getId() <= 0) {
+            throw new PetNotFoundException("Katten blev ikke fundet");
+        }
+
+        boolean wasRemoved = this.attendingPets.removeIf(attendingPet -> attendingPet.getId() == pet.getId());
+        if (!wasRemoved) {
+            throw new PetNotFoundException("Katten er ikke tilmeldt begivenheden");
+        }
     }
 
     public int getId() {

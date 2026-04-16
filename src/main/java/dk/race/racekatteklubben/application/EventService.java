@@ -1,8 +1,10 @@
 package dk.race.racekatteklubben.application;
 
+import dk.race.racekatteklubben.domain.exception.PetNotFoundException;
 import dk.race.racekatteklubben.domain.model.Event;
 import dk.race.racekatteklubben.domain.model.Pet;
 import dk.race.racekatteklubben.domain.repository.EventRepository;
+import dk.race.racekatteklubben.domain.repository.PetRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,14 +14,20 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final PetRepository petRepository;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, PetRepository petRepository) {
         this.eventRepository = eventRepository;
+        this.petRepository = petRepository;
     }
 
     public void addEvent(Event event) {
         validateEvent(event);
         eventRepository.addEvent(event);
+    }
+
+    public void createEventForOwner(int ownerId, String title, String description, LocalDateTime dateTime) {
+        addEvent(new Event(0, ownerId, title, description, dateTime));
     }
 
     public void updateEvent(Event event) {
@@ -37,6 +45,10 @@ public class EventService {
         eventRepository.updateEvent(event);
     }
 
+    public void updateEventForOwner(int eventId, int ownerId, String title, String description, LocalDateTime dateTime) {
+        updateEvent(new Event(eventId, ownerId, title, description, dateTime));
+    }
+
     public void removeEvent(Event event) {
         Event existingEvent = eventRepository.getEventById(event.getId());
         if (existingEvent == null) {
@@ -48,6 +60,19 @@ public class EventService {
         }
 
         eventRepository.removeEvent(event);
+    }
+
+    public void deleteEventForOwner(int eventId, int ownerId) {
+        Event existingEvent = eventRepository.getEventById(eventId);
+        if (existingEvent == null) {
+            throw new IllegalArgumentException("Begivenheden blev ikke fundet");
+        }
+
+        if (existingEvent.getOwnerId() != ownerId) {
+            throw new IllegalArgumentException("Du ejer ikke denne begivenhed");
+        }
+
+        eventRepository.removeEvent(existingEvent);
     }
 
     public List<Event> getEvents() {
@@ -63,11 +88,19 @@ public class EventService {
     }
 
     public void addAttendingPet(int eventId, int petId) {
-        eventRepository.addAttendingPet(petId, eventId);
+        Event event = requireEventWithAttendingPets(eventId);
+        Pet pet = requirePet(petId);
+
+        event.addAttendingPet(pet);
+        eventRepository.addAttendingPet(eventId, petId);
     }
 
     public void removeAttendingPet(int eventId, int petId) {
-        eventRepository.removeAttendingPet(petId, eventId);
+        Event event = requireEventWithAttendingPets(eventId);
+        Pet pet = requirePet(petId);
+
+        event.removeAttendingPet(pet);
+        eventRepository.removeAttendingPet(eventId, petId);
     }
 
     public Event getEventById(int id) {
@@ -101,5 +134,24 @@ public class EventService {
         if (event.getDateTime().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Arrangementet skal ligge i fremtiden");
         }
+    }
+
+    private Event requireEventWithAttendingPets(int eventId) {
+        Event event = eventRepository.getEventById(eventId);
+        if (event == null) {
+            throw new IllegalArgumentException("Begivenheden blev ikke fundet");
+        }
+
+        event.replaceAttendingPets(eventRepository.findAttendingPetsByEventId(eventId));
+        return event;
+    }
+
+    private Pet requirePet(int petId) {
+        Pet pet = petRepository.findById(petId);
+        if (pet == null) {
+            throw new PetNotFoundException("Katten blev ikke fundet");
+        }
+
+        return pet;
     }
 }

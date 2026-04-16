@@ -1,16 +1,13 @@
 package dk.race.racekatteklubben.presentation.controller;
 
 import dk.race.racekatteklubben.application.AuthService;
-import dk.race.racekatteklubben.domain.model.Role;
 import dk.race.racekatteklubben.domain.model.User;
+import dk.race.racekatteklubben.presentation.request.RegisterRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 public class AuthController {
@@ -45,21 +42,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username,
-                           @RequestParam String email,
-                           @RequestParam String password) {
+    public String register(RegisterRequest request) {
         try {
-            User user = new User(
-                    0,
-                    username,
-                    email,
-                    "",
-                    LocalDate.now(),
-                    Role.USER,
-                    List.of()
-            );
-
-            authService.register(user, password);
+            authService.register(request.username(), request.email(), request.password());
             return "redirect:/login";
         } catch (IllegalArgumentException ex) {
             return "redirect:/register?error";

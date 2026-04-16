@@ -1,10 +1,13 @@
 package dk.race.racekatteklubben.application;
 
 import dk.race.racekatteklubben.application.validation.UserValidator;
+import dk.race.racekatteklubben.domain.model.Role;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class AuthService {
@@ -36,9 +39,22 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    public void register(String username, String email, String rawPassword) {
+        User user = new User(
+                0,
+                username,
+                email,
+                "",
+                LocalDate.now(),
+                Role.USER
+        );
+
+        register(user, rawPassword);
+    }
+
     public User login(String username, String rawPassword) {
         if (username == null || username.isBlank()) {
-            throw new IllegalArgumentException("Brugernavn må ikke være tomt");
+            throw new IllegalArgumentException("Brugernavn mÃ¥ ikke vÃ¦re tomt");
         }
 
         userValidator.validateRawPassword(rawPassword);

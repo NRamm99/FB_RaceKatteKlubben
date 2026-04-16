@@ -9,7 +9,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -129,8 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
                     rs.getString("email"),
                     rs.getString("password_hash"),
                     signUpDate != null ? signUpDate.toLocalDate() : null,
-                    role,
-                    List.of()
+                    role
             );
         };
     }

@@ -1,9 +1,12 @@
 package dk.race.racekatteklubben.application;
 
+import dk.race.racekatteklubben.domain.exception.PetAlreadyAttendingException;
+import dk.race.racekatteklubben.domain.exception.PetNotFoundException;
 import dk.race.racekatteklubben.domain.model.Event;
 import dk.race.racekatteklubben.domain.model.Pet;
 import dk.race.racekatteklubben.domain.model.Race;
 import dk.race.racekatteklubben.domain.repository.EventRepository;
+import dk.race.racekatteklubben.domain.repository.PetRepository;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -17,7 +20,8 @@ class EventServiceTest {
     @Test
     void addEventSavesEventInRepository() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
         Event event = createEvent(1, "Cat Show");
 
         assertDoesNotThrow(() -> eventService.addEvent(event));
@@ -29,7 +33,8 @@ class EventServiceTest {
     @Test
     void removeEventDeletesEventInRepository() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
         Event event = createEvent(1, "Cat Show");
         repository.savedEvents.add(event);
 
@@ -42,7 +47,8 @@ class EventServiceTest {
     @Test
     void getEventsReturnsAllEvents() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
 
         Event firstEvent = createEvent(1, "Cat Show");
         Event secondEvent = createEvent(2, "Vet Visit");
@@ -60,7 +66,8 @@ class EventServiceTest {
     @Test
     void getEventByIdReturnsEventWithAttendingPets() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
 
         Event event = createEvent(1, "Cat Show");
         Pet firstPet = createPet(1, "Milo");
@@ -83,7 +90,8 @@ class EventServiceTest {
     @Test
     void getEventByIdReturnsNullWhenEventDoesNotExist() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
 
         Event foundEvent = eventService.getEventById(99);
 
@@ -93,7 +101,12 @@ class EventServiceTest {
     @Test
     void addAttendingPetCallsRepository() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(3, "Cat Show");
+        Pet pet = createPet(7, "Luna");
+        repository.savedEvents.add(event);
+        petRepository.save(pet);
 
         assertDoesNotThrow(() -> eventService.addAttendingPet(3, 7));
 
@@ -107,7 +120,13 @@ class EventServiceTest {
     @Test
     void removeAttendingPetCallsRepository() {
         InMemoryEventRepository repository = new InMemoryEventRepository();
-        EventService eventService = new EventService(repository);
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(3, "Cat Show");
+        Pet pet = createPet(7, "Luna");
+        repository.savedEvents.add(event);
+        repository.attendingPetsToReturn.add(pet);
+        petRepository.save(pet);
 
         assertDoesNotThrow(() -> eventService.removeAttendingPet(3, 7));
 
@@ -116,6 +135,59 @@ class EventServiceTest {
 
         assertEquals(3, link.eventId());
         assertEquals(7, link.petId());
+    }
+
+    @Test
+    void addAttendingPetThrowsWhenPetIsAlreadyAttending() {
+        InMemoryEventRepository repository = new InMemoryEventRepository();
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(3, "Cat Show");
+        Pet pet = createPet(7, "Luna");
+        repository.savedEvents.add(event);
+        repository.attendingPetsToReturn.add(pet);
+        petRepository.save(pet);
+
+        PetAlreadyAttendingException exception = assertThrows(
+                PetAlreadyAttendingException.class,
+                () -> eventService.addAttendingPet(3, 7)
+        );
+
+        assertEquals("Katten er allerede tilmeldt", exception.getMessage());
+    }
+
+    @Test
+    void removeAttendingPetThrowsWhenPetIsNotAttending() {
+        InMemoryEventRepository repository = new InMemoryEventRepository();
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(3, "Cat Show");
+        Pet pet = createPet(7, "Luna");
+        repository.savedEvents.add(event);
+        petRepository.save(pet);
+
+        PetNotFoundException exception = assertThrows(
+                PetNotFoundException.class,
+                () -> eventService.removeAttendingPet(3, 7)
+        );
+
+        assertEquals("Katten er ikke tilmeldt begivenheden", exception.getMessage());
+    }
+
+    @Test
+    void addAttendingPetThrowsWhenPetDoesNotExist() {
+        InMemoryEventRepository repository = new InMemoryEventRepository();
+        InMemoryPetRepository petRepository = new InMemoryPetRepository();
+        EventService eventService = new EventService(repository, petRepository);
+        Event event = createEvent(3, "Cat Show");
+        repository.savedEvents.add(event);
+
+        PetNotFoundException exception = assertThrows(
+                PetNotFoundException.class,
+                () -> eventService.addAttendingPet(3, 99)
+        );
+
+        assertEquals("Katten blev ikke fundet", exception.getMessage());
     }
 
     private static Event createEvent(int id, String title) {
@@ -175,18 +247,55 @@ class EventServiceTest {
         }
 
         @Override
-        public void addAttendingPet(int petId, int eventId) {
+        public void addAttendingPet(int eventId, int petId) {
             addedPetEventLinks.add(new PetEventLink(eventId, petId));
         }
 
         @Override
-        public void removeAttendingPet(int petId, int eventId) {
+        public void removeAttendingPet(int eventId, int petId) {
             removedPetEventLinks.add(new PetEventLink(eventId, petId));
         }
 
         @Override
         public List<Pet> findAttendingPetsByEventId(int eventId) {
             return List.copyOf(attendingPetsToReturn);
+        }
+    }
+
+    private static final class InMemoryPetRepository implements PetRepository {
+        private final List<Pet> pets = new ArrayList<>();
+
+        @Override
+        public void save(Pet pet) {
+            pets.add(pet);
+        }
+
+        @Override
+        public void update(Pet pet) {
+        }
+
+        @Override
+        public void deleteById(int id) {
+        }
+
+        @Override
+        public Pet findById(int id) {
+            return pets.stream()
+                    .filter(pet -> pet.getId() == id)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        @Override
+        public List<Pet> findAll() {
+            return List.copyOf(pets);
+        }
+
+        @Override
+        public List<Pet> findByOwnerId(int ownerId) {
+            return pets.stream()
+                    .filter(pet -> pet.getOwnerId() == ownerId)
+                    .toList();
         }
     }
 

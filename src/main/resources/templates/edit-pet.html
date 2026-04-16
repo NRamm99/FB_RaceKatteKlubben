@@ -25,23 +25,23 @@
     <img th:src="@{/images/FrontCat.png}" alt="Kat">
 
     <div class="login-wrapper">
-        <form th:action="@{/pets/edit-pet}" method="post" class="login-form" th:object="${pet}">
+        <form th:action="@{/pets/edit-pet}" method="post" class="login-form" th:object="${pet}" novalidate>
             <h1 class="title">Rediger kat</h1>
 
             <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <input type="hidden" th:field="*{id}">
 
             <label class="label" for="name">Kattens navn</label>
-            <input class="field" id="name" type="text" th:field="*{name}" required>
+            <input class="field" id="name" type="text" th:field="*{name}">
 
             <label class="label" for="race">Race</label>
-            <select class="field" id="race" th:field="*{race}" required>
+            <select class="field" id="race" th:field="*{race}">
                 <option th:each="race : ${races}" th:value="${race.name()}" th:text="${race.displayName}"></option>
             </select>
 
             <button class="loginbtn" type="submit">Gem ændringer</button>
 
-            <p th:if="${param.error}" style="color:red;">Kunne ikke opdatere kat</p>
+            <p th:if="${error}" style="color:red;" th:text="${error}"></p>
 
             <a th:href="@{/profile}" class="btn">Tilbage til profil</a>
         </form>

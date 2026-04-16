@@ -121,7 +121,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public void addAttendingPet(int petId, int eventId) {
+    public void addAttendingPet(int eventId, int petId) {
         String sql = """
                 INSERT INTO pet_in_event (pet_id, event_id)
                 VALUES (?, ?)
@@ -131,7 +131,7 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public void removeAttendingPet(int petId, int eventId) {
+    public void removeAttendingPet(int eventId, int petId) {
         String sql = """
                 DELETE FROM pet_in_event
                 WHERE pet_id = ? AND event_id = ?;

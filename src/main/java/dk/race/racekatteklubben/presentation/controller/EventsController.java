@@ -5,8 +5,9 @@ import dk.race.racekatteklubben.application.PetService;
 import dk.race.racekatteklubben.domain.model.Event;
 import dk.race.racekatteklubben.domain.model.Pet;
 import dk.race.racekatteklubben.domain.model.User;
+import dk.race.racekatteklubben.presentation.request.CreateEventRequest;
+import dk.race.racekatteklubben.presentation.request.UpdateEventRequest;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -105,9 +105,7 @@ public class EventsController {
     }
 
     @PostMapping("/events/create")
-    public String createEvent(@RequestParam String title,
-                              @RequestParam String description,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+    public String createEvent(CreateEventRequest request,
                               HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
 
@@ -116,8 +114,7 @@ public class EventsController {
         }
 
         try {
-            Event event = new Event(0, user.getId(), title, description, dateTime);
-            eventService.addEvent(event);
+            eventService.createEventForOwner(user.getId(), request.title(), request.description(), request.dateTime());
             return "redirect:/events?created";
         } catch (IllegalArgumentException ex) {
             return "redirect:/events/create?error";
@@ -126,9 +123,7 @@ public class EventsController {
 
     @PostMapping("/events/{eventId}/edit")
     public String updateEvent(@PathVariable int eventId,
-                              @RequestParam String title,
-                              @RequestParam String description,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                              UpdateEventRequest request,
                               HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
 
@@ -137,8 +132,7 @@ public class EventsController {
         }
 
         try {
-            Event event = new Event(eventId, user.getId(), title, description, dateTime);
-            eventService.updateEvent(event);
+            eventService.updateEventForOwner(eventId, user.getId(), request.title(), request.description(), request.dateTime());
             return "redirect:/events?updated";
         } catch (IllegalArgumentException ex) {
             return "redirect:/events/" + eventId + "/edit?error";
@@ -201,8 +195,7 @@ public class EventsController {
         }
 
         try {
-            Event event = new Event(eventId, user.getId(), "", "", LocalDateTime.now().plusDays(1));
-            eventService.removeEvent(event);
+            eventService.deleteEventForOwner(eventId, user.getId());
             return "redirect:/events?deleted";
         } catch (IllegalArgumentException ex) {
             return "redirect:/events?error";

@@ -19,9 +19,9 @@ public interface EventRepository {
 
     public Event getEventById(int id);
 
-    public void addAttendingPet(int petId, int eventId);
+    public void addAttendingPet(int eventId, int petId);
 
-    public void removeAttendingPet(int petId, int eventId);
+    public void removeAttendingPet(int eventId, int petId);
 
     List<Pet> findAttendingPetsByEventId(int eventId);
 }

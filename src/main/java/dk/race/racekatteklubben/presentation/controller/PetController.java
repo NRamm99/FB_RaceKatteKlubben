@@ -5,6 +5,8 @@ import dk.race.racekatteklubben.application.UserService;
 import dk.race.racekatteklubben.domain.model.Pet;
 import dk.race.racekatteklubben.domain.model.Race;
 import dk.race.racekatteklubben.domain.model.User;
+import dk.race.racekatteklubben.presentation.request.CreatePetRequest;
+import dk.race.racekatteklubben.presentation.request.UpdatePetRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,9 +40,9 @@ public class PetController {
     }
 
     @PostMapping("/pets/create")
-    public String createPet(@RequestParam String name,
-                            @RequestParam Race race,
-                            HttpSession session) {
+    public String createPet(CreatePetRequest request,
+                            HttpSession session,
+                            Model model) {
         User user = (User) session.getAttribute("loggedInUser");
 
         if (user == null) {
@@ -48,17 +50,14 @@ public class PetController {
         }
 
         try {
-            Pet pet = new Pet(
-                    0,
-                    name,
-                    race,
-                    user.getId()
-            );
-
-            petService.createPet(pet);
+            petService.createPetForOwner(request.name(), request.race(), user.getId());
             return "redirect:/profile";
         } catch (IllegalArgumentException ex) {
-            return "redirect:/pets/create?error";
+            model.addAttribute("races", Race.values());
+            model.addAttribute("name", request.name());
+            model.addAttribute("selectedRace", request.race());
+            model.addAttribute("error", ex.getMessage());
+            return "create-cat";
         }
     }
 
@@ -95,10 +94,9 @@ public class PetController {
     }
 
     @PostMapping("/pets/edit-pet")
-    public String updatePet(@RequestParam int id,
-                            @RequestParam String name,
-                            @RequestParam Race race,
-                            HttpSession session) {
+    public String updatePet(UpdatePetRequest request,
+                            HttpSession session,
+                            Model model) {
 
         User user = (User) session.getAttribute("loggedInUser");
 
@@ -107,21 +105,15 @@ public class PetController {
         }
 
         try {
-            Pet pet = petService.getPetById(id);
-
-            if (pet.getOwnerId() != user.getId()) {
-                return "redirect:/profile";
-            }
-
-            pet.changeName(name);
-            pet.changeRace(race);
-
-            petService.updatePet(pet);
-
+            petService.updatePetForOwner(request.id(), request.name(), request.race(), user.getId());
             return "redirect:/profile";
 
         } catch (IllegalArgumentException ex) {
-            return "redirect:/pets/edit-pet?id=" + id + "&error";
+            Pet pet = petService.getPetById(request.id());
+            model.addAttribute("pet", pet);
+            model.addAttribute("races", Race.values());
+            model.addAttribute("error", ex.getMessage());
+            return "edit-pet";
         }
     }
 
@@ -135,13 +127,7 @@ public class PetController {
         }
 
         try {
-            Pet pet = petService.getPetById(id);
-
-            if (pet.getOwnerId() != user.getId()) {
-                return "redirect:/profile?notOwner";
-            }
-
-            petService.deletePet(id);
+            petService.deletePetForOwner(id, user.getId());
             return "redirect:/profile?petDeleted";
         } catch (IllegalArgumentException ex) {
             return "redirect:/profile?petDeleteError";

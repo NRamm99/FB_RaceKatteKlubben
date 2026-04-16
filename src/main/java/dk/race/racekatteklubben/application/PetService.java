@@ -1,6 +1,7 @@
 package dk.race.racekatteklubben.application;
 
 import dk.race.racekatteklubben.domain.model.Pet;
+import dk.race.racekatteklubben.domain.model.Race;
 import dk.race.racekatteklubben.domain.model.User;
 import dk.race.racekatteklubben.domain.repository.PetRepository;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class PetService {
         petRepository.save(pet);
     }
 
+    public void createPetForOwner(String name, Race race, int ownerId) {
+        createPet(new Pet(0, name, race, ownerId));
+    }
+
     public void updatePet(Pet pet) {
         if (pet == null) {
             throw new IllegalArgumentException("Oplysninger om katten mangler");
@@ -40,6 +45,18 @@ public class PetService {
         petRepository.update(pet);
     }
 
+    public void updatePetForOwner(int petId, String name, Race race, int ownerId) {
+        Pet pet = getPetById(petId);
+
+        if (pet.getOwnerId() != ownerId) {
+            throw new IllegalArgumentException("Du ejer ikke denne kat");
+        }
+
+        pet.changeName(name);
+        pet.changeRace(race);
+        updatePet(pet);
+    }
+
     public void deletePet(int id) {
         if (id <= 0) {
             throw new IllegalArgumentException("Ugyldig kat");
@@ -51,6 +68,16 @@ public class PetService {
         }
 
         petRepository.deleteById(id);
+    }
+
+    public void deletePetForOwner(int petId, int ownerId) {
+        Pet pet = getPetById(petId);
+
+        if (pet.getOwnerId() != ownerId) {
+            throw new IllegalArgumentException("Du ejer ikke denne kat");
+        }
+
+        deletePet(petId);
     }
 
     public Pet getPetById(int id) {

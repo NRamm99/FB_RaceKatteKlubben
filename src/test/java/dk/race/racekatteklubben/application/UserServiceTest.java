@@ -72,7 +72,7 @@ class UserServiceTest {
         InMemoryUserRepository repository = new InMemoryUserRepository();
         UserValidator userValidator = new UserValidator();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserService userService = new UserService(repository, userValidator,  passwordEncoder);
+        UserService userService = new UserService(repository, userValidator, passwordEncoder);
         User user = createUser("cat.owner@example.com");
 
         assertDoesNotThrow(() -> userService.deleteUser(user));
@@ -108,8 +108,7 @@ class UserServiceTest {
                 "second@example.com",
                 "another-password",
                 LocalDate.now(),
-                Role.USER,
-                List.of()
+                Role.USER
         );
         repository.save(firstUser);
         repository.save(secondUser);
@@ -134,8 +133,7 @@ class UserServiceTest {
                 "second@example.com",
                 "another-password",
                 LocalDate.now(),
-                Role.USER,
-                List.of()
+                Role.USER
         );
         repository.save(firstUser);
         repository.save(secondUser);
@@ -158,8 +156,7 @@ class UserServiceTest {
                 "second@example.com",
                 "another-password",
                 LocalDate.now(),
-                Role.USER,
-                List.of()
+                Role.USER
         );
         repository.save(firstUser);
         repository.save(secondUser);
@@ -180,8 +177,7 @@ class UserServiceTest {
                 email,
                 "hashed-password",
                 LocalDate.now(),
-                Role.USER,
-                List.of()
+                Role.USER
         );
     }
 
